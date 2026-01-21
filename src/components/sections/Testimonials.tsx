@@ -36,10 +36,8 @@ export function Testimonials() {
     setActiveIndex((prev) => (prev + 1) % testimonials.length);
   }, []);
 
-  // Auto-advance every 6 seconds
   useEffect(() => {
     if (isPaused) return;
-
     const interval = setInterval(nextTestimonial, 6000);
     return () => clearInterval(interval);
   }, [isPaused, nextTestimonial]);
@@ -48,18 +46,22 @@ export function Testimonials() {
     <section id="testimonials" className="section-padding bg-cream-dark">
       <div className="container-md">
         {/* Header */}
-        <SectionHeader
-          eyebrow="Kind Words"
-          headline="What our partners say."
-          align="center"
-          className="mb-16"
-        />
+        <div data-reveal>
+          <SectionHeader
+            eyebrow="Kind Words"
+            headline="What our partners say."
+            align="center"
+            className="mb-16"
+          />
+        </div>
 
         {/* Testimonial */}
         <div
           className="max-w-[720px] mx-auto"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
+          data-reveal
+          data-reveal-delay="150"
         >
           <div className="relative min-h-[200px]">
             {testimonials.map((testimonial, index) => (

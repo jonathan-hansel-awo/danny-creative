@@ -140,20 +140,18 @@ export function Services() {
     <section id="services" className="section-padding bg-cream-dark">
       <div className="container-lg">
         {/* Header */}
-        <SectionHeader
-          eyebrow="What We Do"
-          headline="Everything your brand needs to shine."
-          className="mb-16"
-        />
+        <div data-reveal>
+          <SectionHeader
+            eyebrow="What We Do"
+            headline="Everything your brand needs to shine."
+            className="mb-16"
+          />
+        </div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service, index) => (
-            <div
-              key={service.title}
-              className="reveal-hidden"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
+          {services.map((service) => (
+            <div key={service.title} data-reveal="fade-up">
               <ServiceCard {...service} />
             </div>
           ))}

@@ -13,15 +13,21 @@ export function About() {
     <section id="about" className="section-padding">
       <div className="container-md">
         {/* Header */}
-        <SectionHeader
-          eyebrow="About Us"
-          headline=""
-          align="center"
-          className="mb-12"
-        />
+        <div data-reveal>
+          <SectionHeader
+            eyebrow="About Us"
+            headline=""
+            align="center"
+            className="mb-12"
+          />
+        </div>
 
         {/* Pull Quote */}
-        <blockquote className="text-center mb-12">
+        <blockquote
+          className="text-center mb-12"
+          data-reveal
+          data-reveal-delay="100"
+        >
           <p className="font-display text-display-md leading-tight tracking-[-0.01em] text-ink">
             &quot;We believe the best brands don&apos;t just look good —{" "}
             <span className="text-spark">they make people feel something.</span>
@@ -30,7 +36,11 @@ export function About() {
         </blockquote>
 
         {/* Body Text */}
-        <div className="max-w-[640px] mx-auto text-center mb-16">
+        <div
+          className="max-w-[640px] mx-auto text-center mb-16"
+          data-reveal
+          data-reveal-delay="200"
+        >
           <p className="text-body-lg text-ink-light mb-6">
             Danny Creative is a branding agency for businesses that want to
             stand out. We work with hotels, retail, automotive, and everything
@@ -45,13 +55,9 @@ export function About() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-8 max-w-[600px] mx-auto">
-          {stats.map((stat, index) => (
-            <div
-              key={stat.label}
-              className="text-center reveal-hidden"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
+        <div className="grid grid-cols-3 gap-8 max-w-[600px] mx-auto stagger-children">
+          {stats.map((stat) => (
+            <div key={stat.label} className="text-center" data-reveal="scale">
               <div className="font-display text-display-md text-spark mb-2">
                 {stat.value}
               </div>

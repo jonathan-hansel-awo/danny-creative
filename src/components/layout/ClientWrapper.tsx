@@ -3,6 +3,7 @@
 import { Spark } from "@/components/effects/Spark";
 import { MobileSparkEffects } from "@/components/effects/MobileSpark";
 import { AmbientOrbs } from "@/components/effects/AmbientOrbs";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 interface ClientWrapperProps {
   children: React.ReactNode;
@@ -12,13 +13,19 @@ interface ClientWrapperProps {
  * ClientWrapper - Wraps the application with client-side effects
  *
  * This component handles:
+ * - Scroll-triggered reveal animations
  * - The Spark cursor companion (desktop)
  * - Mobile tap ripple and glow effects (mobile)
  * - Ambient background orbs (atmospheric depth)
- * - Smooth scroll provider (to be added later)
- * - Any other global client-side effects
  */
 export function ClientWrapper({ children }: ClientWrapperProps) {
+  // Initialize scroll reveal animations globally
+  useScrollReveal({
+    threshold: 0.15,
+    rootMargin: "0px 0px -50px 0px",
+    once: true,
+  });
+
   return (
     <>
       {/* Ambient Background Orbs - Behind everything */}

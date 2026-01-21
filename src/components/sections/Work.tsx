@@ -40,27 +40,25 @@ export function Work() {
     <section id="work" className="section-padding">
       <div className="container-lg">
         {/* Header */}
-        <SectionHeader
-          eyebrow="Selected Work"
-          headline="Brands we've brought to life."
-          className="mb-16"
-        />
+        <div data-reveal>
+          <SectionHeader
+            eyebrow="Selected Work"
+            headline="Brands we've brought to life."
+            className="mb-16"
+          />
+        </div>
 
         {/* Project Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {projects.map((project, index) => (
-            <div
-              key={project.title}
-              className="reveal-hidden"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 stagger-children">
+          {projects.map((project) => (
+            <div key={project.title} data-reveal="scale-up">
               <ProjectCard {...project} />
             </div>
           ))}
         </div>
 
         {/* View All Link */}
-        <div className="mt-12 text-center">
+        <div className="mt-12 text-center" data-reveal data-reveal-delay="400">
           <Link
             href="/work"
             className="inline-flex items-center gap-2 font-ui text-ink hover:text-spark transition-colors duration-300 group"

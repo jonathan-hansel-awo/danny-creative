@@ -1,24 +1,35 @@
 "use client";
 
-import { Button, ButtonLink } from "@/components/ui/Button";
+import { ButtonLink } from "@/components/ui/Button";
 
 export function Contact() {
   return (
     <section id="contact" className="section-padding">
       <div className="container-md text-center">
         {/* Headline */}
-        <h2 className="font-display text-display-lg leading-tight tracking-[-0.02em] text-ink mb-6">
+        <h2
+          className="font-display text-display-lg leading-tight tracking-[-0.02em] text-ink mb-6"
+          data-reveal
+        >
           Ready to make something{" "}
           <span className="text-spark">amazing?</span>
         </h2>
 
         {/* Subheadline */}
-        <p className="font-display text-body-lg text-ink-light mb-12 max-w-[480px] mx-auto">
+        <p
+          className="font-display text-body-lg text-ink-light mb-12 max-w-[480px] mx-auto"
+          data-reveal
+          data-reveal-delay="100"
+        >
           Let&apos;s talk about your brand.
         </p>
 
         {/* CTA */}
-        <div className="flex flex-col items-center gap-6">
+        <div
+          className="flex flex-col items-center gap-6"
+          data-reveal
+          data-reveal-delay="200"
+        >
           <ButtonLink
             href="mailto:hello@dannycreative.com"
             variant="primary"
