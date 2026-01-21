@@ -12,7 +12,7 @@ interface ParallaxWrapperProps {
 
 export default function ParallaxWrapper({
   children,
-  speed = 0.5,
+  speed = 0.1,
   direction = "vertical",
   className = "",
 }: ParallaxWrapperProps) {

@@ -82,7 +82,7 @@ export default function Hero() {
             )}
           >
             <span className="block">We Create Brands</span>
-            <span className="block text-coral">That Move People</span>
+            <span className="block text-coral">That Win Hearts</span>
           </motion.h1>
         </ParallaxWrapper>
 

@@ -19,7 +19,7 @@ export default function FluidDistortion({
   enabled = true,
 }: FluidDistortionProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>(0);
+  const animationRef = useRef<number | undefined>(undefined);
   const mousePosition = useMousePosition(0.08);
   const currentIntensity = useRef(0);
   const targetIntensity = useRef(0);
