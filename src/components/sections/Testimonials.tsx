@@ -1,52 +1,18 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import RoomSection from "@/components/effects/RoomSection";
 import SectionHeader from "@/components/ui/SectionHeader";
 import TestimonialCard from "@/components/ui/TestimonialCard";
 import RevealOnScroll from "@/components/effects/RevealOnScroll";
-import { Testimonial } from "@/types";
-
-const testimonials: Testimonial[] = [
-  {
-    id: "1",
-    quote:
-      "Danny Creative didn't just rebrand us—they gave us a new identity that actually feels like who we are. The response from our customers has been overwhelming.",
-    name: "Sarah Chen",
-    role: "CEO",
-    company: "Lumina Hotels",
-  },
-  {
-    id: "2",
-    quote:
-      "Working with this team was unlike anything else. They pushed us creatively while staying true to our vision. The result? Pure magic.",
-    name: "Marcus Webb",
-    role: "Founder",
-    company: "Vertex Auto",
-  },
-  {
-    id: "3",
-    quote:
-      "The attention to detail is extraordinary. Every pixel, every animation, every word—it all matters to them. That level of care is rare.",
-    name: "Elena Rodriguez",
-    role: "Creative Director",
-    company: "Echo Studios",
-  },
-  {
-    id: "4",
-    quote:
-      "They transformed how we present ourselves to the world. Our brand finally matches the quality of our service.",
-    name: "James Liu",
-    role: "Managing Partner",
-    company: "Catalyst Finance",
-  },
-];
+import { testimonials } from "@/data/testimonials";
+import { siteCopy } from "@/data/copy";
 
 export default function Testimonials() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const copy = siteCopy.testimonials;
 
   const nextTestimonial = () => {
     setActiveIndex((prev) => (prev + 1) % testimonials.length);
@@ -64,7 +30,8 @@ export default function Testimonials() {
       <div
         className="absolute top-0 left-0 right-0 h-32 pointer-events-none"
         style={{
-          background: "linear-gradient(to bottom, #faf9f6, #0a0a0a)",
+          background:
+            "linear-gradient(to bottom, var(--color-light-bg), var(--color-dark-bg))",
         }}
       />
 
@@ -72,12 +39,12 @@ export default function Testimonials() {
         {/* Header */}
         <div className="mb-16 md:mb-20">
           <SectionHeader
-            eyebrow="Testimonials"
+            eyebrow={copy.eyebrow}
             headline={
               <>
-                Words From Those
+                {copy.headline[0]}
                 <br />
-                <span className="text-coral">We&apos;ve Helped</span>
+                <span className="text-coral">{copy.headline[1]}</span>
               </>
             }
             align="left"
@@ -85,7 +52,7 @@ export default function Testimonials() {
         </div>
 
         {/* Testimonial Carousel */}
-        <div ref={containerRef} className="relative">
+        <div className="relative">
           {/* Cards */}
           <div className="relative min-h-[400px] md:min-h-[350px]">
             <AnimatePresence mode="wait">

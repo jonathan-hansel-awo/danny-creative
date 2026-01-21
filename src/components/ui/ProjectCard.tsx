@@ -72,11 +72,11 @@ export default function ProjectCard({
       transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
       {/* Image Container */}
-      <div className="relative aspect-[4/3] overflow-hidden">
+      <div className="relative aspect-4/3 overflow-hidden">
         {/* Placeholder / Skeleton */}
         <div
           className={cn(
-            "absolute inset-0 bg-gradient-to-br from-coral/10 via-dark-bg to-coral/5",
+            "absolute inset-0 bg-linear-to-br from-coral/10 via-dark-bg to-coral/5",
             "transition-opacity duration-500",
             imageLoaded ? "opacity-0" : "opacity-100",
           )}
@@ -134,7 +134,7 @@ export default function ProjectCard({
         <div
           className={cn(
             "absolute inset-0",
-            "bg-gradient-to-t from-dark-bg/90 via-dark-bg/30 to-transparent",
+            "bg-linear-to-t from-dark-bg/90 via-dark-bg/30 to-transparent",
             "transition-opacity duration-500",
             isHovered ? "opacity-100" : "opacity-60",
           )}
@@ -201,7 +201,7 @@ export default function ProjectCard({
 
       {/* Bottom accent line */}
       <motion.div
-        className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-coral to-coral-light"
+        className="absolute bottom-0 left-0 right-0 h-0.5 bg-linear-to-r from-coral to-coral-light"
         initial={{ scaleX: 0 }}
         animate={{ scaleX: isHovered ? 1 : 0 }}
         transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}

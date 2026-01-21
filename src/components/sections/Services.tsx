@@ -5,61 +5,20 @@ import RoomSection from "@/components/effects/RoomSection";
 import SectionHeader from "@/components/ui/SectionHeader";
 import ServiceCard from "@/components/ui/ServiceCard";
 import RevealOnScroll from "@/components/effects/RevealOnScroll";
-import { Service } from "@/types";
-
-const services: Service[] = [
-  {
-    id: "1",
-    icon: "01",
-    title: "Brand Strategy",
-    description:
-      "We dive deep into your vision, audience, and market to craft positioning that commands attention and drives meaningful connection.",
-  },
-  {
-    id: "2",
-    icon: "02",
-    title: "Visual Identity",
-    description:
-      "Logos, color systems, typography—every visual element engineered to be instantly recognizable and impossible to forget.",
-  },
-  {
-    id: "3",
-    icon: "03",
-    title: "Digital Experience",
-    description:
-      "Websites and apps that don't just look stunning—they feel alive, responsive, and deeply engaging at every touchpoint.",
-  },
-  {
-    id: "4",
-    icon: "04",
-    title: "Motion & Animation",
-    description:
-      "Movement that tells your story. From micro-interactions to full campaigns, we make brands breathe and come alive.",
-  },
-  {
-    id: "5",
-    icon: "05",
-    title: "Content Creation",
-    description:
-      "Photography, video, and written content that captures your essence and speaks directly to your audience.",
-  },
-  {
-    id: "6",
-    icon: "06",
-    title: "Campaign Launch",
-    description:
-      "Strategic rollouts across every channel. We don't just create—we ensure the world sees it and responds.",
-  },
-];
+import { services } from "@/data/services";
+import { siteCopy } from "@/data/copy";
 
 export default function Services() {
+  const copy = siteCopy.services;
+
   return (
     <RoomSection id="services" room="light" className="py-32 md:py-40">
       {/* Transition gradient from dark */}
       <div
         className="absolute top-0 left-0 right-0 h-32 pointer-events-none"
         style={{
-          background: "linear-gradient(to bottom, #0a0a0a, #faf9f6)",
+          background:
+            "linear-gradient(to bottom, var(--color-dark-bg), var(--color-light-bg))",
         }}
       />
 
@@ -67,15 +26,15 @@ export default function Services() {
         {/* Header */}
         <div className="mb-16 md:mb-20 max-w-2xl">
           <SectionHeader
-            eyebrow="Services"
+            eyebrow={copy.eyebrow}
             headline={
               <>
-                What We
+                {copy.headline[0]}
                 <br />
-                <span className="text-coral">Do</span>
+                <span className="text-coral">{copy.headline[1]}</span>
               </>
             }
-            subhead="End-to-end creative services designed to elevate your brand at every stage of its journey."
+            subhead={copy.subhead}
             align="left"
           />
         </div>

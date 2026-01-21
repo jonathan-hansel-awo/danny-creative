@@ -1,42 +1,32 @@
 "use client";
 
-import { useState, forwardRef, InputHTMLAttributes } from "react";
+import { useState, forwardRef, TextareaHTMLAttributes } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-interface InputProps extends Omit<
-  InputHTMLAttributes<HTMLInputElement>,
-  "size"
-> {
+interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label: string;
   error?: string;
-  size?: "sm" | "md" | "lg";
 }
 
-const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, size = "md", className, ...props }, ref) => {
+const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ label, error, className, ...props }, ref) => {
     const [isFocused, setIsFocused] = useState(false);
     const [hasValue, setHasValue] = useState(
       !!props.value || !!props.defaultValue,
     );
 
     const handleFocus = () => setIsFocused(true);
-    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const handleBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
       setIsFocused(false);
       setHasValue(!!e.target.value);
     };
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setHasValue(!!e.target.value);
       props.onChange?.(e);
     };
 
     const isLabelFloating = isFocused || hasValue;
-
-    const sizeStyles = {
-      sm: "py-3 text-sm",
-      md: "py-4 text-base",
-      lg: "py-5 text-lg",
-    };
 
     return (
       <div className={cn("relative", className)}>
@@ -62,37 +52,45 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           {props.required && <span className="text-coral ml-1">*</span>}
         </motion.label>
 
-        {/* Input Field */}
-        <input
+        {/* Textarea Field */}
+        <textarea
           ref={ref}
           {...props}
           onChange={handleChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
           className={cn(
-            "w-full px-0 bg-transparent",
+            "w-full px-0 py-4 bg-transparent",
             "border-0 border-b-2",
-            "font-body text-light-text",
+            "font-body text-light-text text-base",
             "placeholder:text-transparent",
             "focus:outline-none",
             "transition-colors duration-300",
+            "resize-none",
+            "min-h-[120px]",
             error
               ? "border-red-500"
               : isFocused
                 ? "border-coral"
                 : "border-light-text/20",
-            sizeStyles[size],
           )}
         />
 
         {/* Animated underline */}
         <motion.div
-          className="absolute bottom-0 left-0 h-0.5 bg-coral"
+          className="absolute bottom-0 left-0 h-[2px] bg-coral"
           initial={{ scaleX: 0 }}
           animate={{ scaleX: isFocused ? 1 : 0 }}
           transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
           style={{ transformOrigin: "left" }}
         />
+
+        {/* Character count (optional) */}
+        {props.maxLength && (
+          <div className="absolute bottom-2 right-0 text-xs text-light-text/40">
+            {String(props.value || "").length}/{props.maxLength}
+          </div>
+        )}
 
         {/* Error Message */}
         <AnimatePresence>
@@ -112,6 +110,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
   },
 );
 
-Input.displayName = "Input";
+Textarea.displayName = "Textarea";
 
-export default Input;
+export default Textarea;

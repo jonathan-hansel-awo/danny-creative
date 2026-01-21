@@ -75,7 +75,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link
           rel="preload"
-          href="/fonts/TenorSans-Regular.ttf"
+          href="/fonts/Tenor_Sans/TenorSans-Regular.ttf"
           as="font"
           type="font/ttf"
           crossOrigin="anonymous"
@@ -86,7 +86,7 @@ export default function RootLayout({
           <RoomProvider>
             <SmoothScroll>
               <ClientWrapper>
-                <ParticleField />
+                {/* <ParticleField /> */}
                 <FluidDistortion />
                 <Navigation />
                 <main>{children}</main>
