@@ -43,7 +43,7 @@ export function Hero() {
               }`}
               style={{ transitionDelay: "700ms" }}
             >
-              people remember.
+              that win hearts.
             </span>
           </span>
         </h1>

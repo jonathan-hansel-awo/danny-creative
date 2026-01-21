@@ -16,7 +16,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variants: Record<ButtonVariant, string> = {
       primary:
-        "bg-ink text-cream hover:bg-spark hover:translate-y-[-2px] hover:shadow-md active:translate-y-0 active:shadow-sm",
+        "bg-ink text-warm-white hover:bg-spark hover:translate-y-[-2px] hover:shadow-md active:translate-y-0 active:shadow-sm",
       secondary:
         "bg-transparent text-ink border-[1.5px] border-ink hover:bg-cream-dark hover:border-spark hover:text-spark",
     };
@@ -54,7 +54,7 @@ const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
 
     const variants: Record<ButtonVariant, string> = {
       primary:
-        "bg-ink text-cream hover:bg-spark hover:translate-y-[-2px] hover:shadow-md active:translate-y-0 active:shadow-sm",
+        "bg-ink text-warm-white hover:bg-spark hover:translate-y-[-2px] hover:shadow-md active:translate-y-0 active:shadow-sm",
       secondary:
         "bg-transparent text-ink border-[1.5px] border-ink hover:bg-cream-dark hover:border-spark hover:text-spark",
     };
