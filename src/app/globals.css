@@ -1,0 +1,351 @@
+@import "tailwindcss";
+
+/* ============================================
+   THEME CONFIGURATION (Tailwind v4)
+   ============================================ */
+
+@theme {
+  /* Colors - Dark Room */
+  --color-dark-bg: #0a0a0a;
+  --color-dark-text: #f5f0e8;
+
+  /* Colors - Light Room */
+  --color-light-bg: #faf9f6;
+  --color-light-text: #1a1a1a;
+
+  /* Colors - Accent */
+  --color-coral: #e07a5f;
+  --color-coral-dark: #c96a4f;
+  --color-coral-light: #e8998d;
+
+  /* Font Families */
+  --font-display: var(--font-tenor), Georgia, serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+
+  /* Font Sizes */
+  --text-display-xl: 4.5rem;
+  --text-display-xl--line-height: 1.1;
+  --text-display-xl--letter-spacing: -0.02em;
+
+  --text-display-l: 3.5rem;
+  --text-display-l--line-height: 1.15;
+  --text-display-l--letter-spacing: -0.01em;
+
+  --text-display-m: 2.5rem;
+  --text-display-m--line-height: 1.2;
+
+  --text-display-s: 2rem;
+  --text-display-s--line-height: 1.25;
+
+  --text-body-l: 1.25rem;
+  --text-body-l--line-height: 1.6;
+
+  --text-body-m: 1rem;
+  --text-body-m--line-height: 1.6;
+
+  --text-body-s: 0.875rem;
+  --text-body-s--line-height: 1.5;
+
+  --text-label: 0.75rem;
+  --text-label--line-height: 1.4;
+  --text-label--letter-spacing: 0.1em;
+
+  /* Spacing */
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+  --spacing-30: 7.5rem;
+  --spacing-34: 8.5rem;
+  --spacing-38: 9.5rem;
+
+  /* Border Radius */
+  --radius-4xl: 2rem;
+
+  /* Transition Timing Functions */
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* Transition Durations */
+  --duration-fast: 0.2s;
+  --duration-normal: 0.4s;
+  --duration-slow: 0.8s;
+  --duration-very-slow: 1.2s;
+
+  /* Shadows - Glows */
+  --shadow-glow-coral-sm: 0 0 20px rgba(224, 122, 95, 0.15);
+  --shadow-glow-coral-md: 0 0 40px rgba(224, 122, 95, 0.25);
+  --shadow-glow-coral-lg: 0 0 60px rgba(224, 122, 95, 0.35);
+
+  /* Z-Index Scale */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-cursor: 500;
+  --z-max: 9999;
+
+  /* Animation Keyframes */
+  --animate-fade-up: fade-up 0.8s var(--ease-out-quad) forwards;
+  --animate-fade-in: fade-in 0.6s ease-out forwards;
+  --animate-scale-in: scale-in 0.6s var(--ease-out-quad) forwards;
+  --animate-pulse-slow: pulse 3s ease-in-out infinite;
+}
+
+@keyframes fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: auto;
+  /* Lenis handles smooth scroll */
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-dark-bg);
+  color: var(--color-dark-text);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--color-coral);
+  color: var(--color-dark-bg);
+}
+
+/* Focus visible */
+:focus-visible {
+  outline: 2px solid var(--color-coral);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-dark-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(245, 240, 232, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 240, 232, 0.3);
+}
+
+/* ============================================
+   CUSTOM UTILITIES
+   ============================================ */
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@utility gpu {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+@utility font-display {
+  font-family: var(--font-display);
+}
+
+@utility font-body {
+  font-family: var(--font-body);
+}
+
+/* Typography utilities */
+@utility text-display-xl {
+  font-size: var(--text-display-xl);
+  line-height: var(--text-display-xl--line-height);
+  letter-spacing: var(--text-display-xl--letter-spacing);
+}
+
+@utility text-display-l {
+  font-size: var(--text-display-l);
+  line-height: var(--text-display-l--line-height);
+  letter-spacing: var(--text-display-l--letter-spacing);
+}
+
+@utility text-display-m {
+  font-size: var(--text-display-m);
+  line-height: var(--text-display-m--line-height);
+}
+
+@utility text-display-s {
+  font-size: var(--text-display-s);
+  line-height: var(--text-display-s--line-height);
+}
+
+@utility text-body-l {
+  font-size: var(--text-body-l);
+  line-height: var(--text-body-l--line-height);
+}
+
+@utility text-body-m {
+  font-size: var(--text-body-m);
+  line-height: var(--text-body-m--line-height);
+}
+
+@utility text-body-s {
+  font-size: var(--text-body-s);
+  line-height: var(--text-body-s--line-height);
+}
+
+@utility text-label {
+  font-size: var(--text-label);
+  line-height: var(--text-label--line-height);
+  letter-spacing: var(--text-label--letter-spacing);
+}
+
+/* Color utilities */
+@utility bg-dark-bg {
+  background-color: var(--color-dark-bg);
+}
+
+@utility bg-light-bg {
+  background-color: var(--color-light-bg);
+}
+
+@utility text-dark-text {
+  color: var(--color-dark-text);
+}
+
+@utility text-light-text {
+  color: var(--color-light-text);
+}
+
+@utility text-coral {
+  color: var(--color-coral);
+}
+
+@utility bg-coral {
+  background-color: var(--color-coral);
+}
+
+@utility bg-coral-dark {
+  background-color: var(--color-coral-dark);
+}
+
+@utility border-coral {
+  border-color: var(--color-coral);
+}
+
+/* Shadow utilities */
+@utility shadow-glow-coral-sm {
+  box-shadow: var(--shadow-glow-coral-sm);
+}
+
+@utility shadow-glow-coral-md {
+  box-shadow: var(--shadow-glow-coral-md);
+}
+
+@utility shadow-glow-coral-lg {
+  box-shadow: var(--shadow-glow-coral-lg);
+}
+
+/* Easing utilities */
+@utility ease-out-expo {
+  transition-timing-function: var(--ease-out-expo);
+}
+
+@utility ease-out-quad {
+  transition-timing-function: var(--ease-out-quad);
+}
+
+/* Animation utilities */
+@utility animate-fade-up {
+  animation: var(--animate-fade-up);
+}
+
+@utility animate-fade-in {
+  animation: var(--animate-fade-in);
+}
+
+@utility animate-scale-in {
+  animation: var(--animate-scale-in);
+}
+
+/* Duration utilities */
+@utility duration-fast {
+  transition-duration: var(--duration-fast);
+}
+
+@utility duration-normal {
+  transition-duration: var(--duration-normal);
+}
+
+@utility duration-slow {
+  transition-duration: var(--duration-slow);
+}
+
+@utility duration-very-slow {
+  transition-duration: var(--duration-very-slow);
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
