@@ -18,7 +18,7 @@ const inter = Inter({
 });
 
 const tenorSans = localFont({
-  src: "../../public/fonts/TenorSans-Regular.ttf",
+  src: "../../public/fonts/Tenor_Sans/TenorSans-Regular.ttf",
   variable: "--font-tenor",
   display: "swap",
 });
