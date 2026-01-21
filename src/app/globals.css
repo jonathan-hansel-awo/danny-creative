@@ -14,9 +14,9 @@
   --color-light-text: #1a1a1a;
 
   /* Colors - Accent */
-  --color-coral: #89ecda;
-  --color-coral-dark: #00ced1;
-  --color-coral-light: #08e8de;
+  --color-coral: #e07a5f;
+  --color-coral-dark: #c96a4f;
+  --color-coral-light: #e8998d;
 
   /* Font Families */
   --font-display: var(--font-tenor), Georgia, serif;
