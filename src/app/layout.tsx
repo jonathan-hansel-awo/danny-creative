@@ -1,112 +1,72 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import localFont from "next/font/local";
+import type { Metadata, Viewport } from "next";
+import { Tenor_Sans, Inter } from "next/font/google";
+import { ClientWrapper } from "@/components/layout/ClientWrapper";
 import "./globals.css";
-import { RoomProvider } from "@/context/RoomContext";
-import { MotionProvider } from "@/context/MotionContext";
-import SmoothScroll from "@/components/effects/SmoothScroll";
-import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
-import ClientWrapper from "@/components/layout/ClientWrapper";
-import { siteCopy } from "@/data/copy";
 
-const inter = Inter({
+// Load Tenor Sans - Display & Body font
+const tenorSans = Tenor_Sans({
+  weight: "400",
   subsets: ["latin"],
-  variable: "--font-inter",
   display: "swap",
+  variable: "--font-tenor",
 });
 
-const tenorSans = localFont({
-  src: "../../public/fonts/Tenor_Sans/TenorSans-Regular.ttf",
-  variable: "--font-tenor",
+// Load Inter - UI font
+const inter = Inter({
+  subsets: ["latin"],
   display: "swap",
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://dannycreative.com"),
-  title: {
-    default: siteCopy.meta.title,
-    template: "%s | Danny Creative",
-  },
-  description: siteCopy.meta.description,
-  keywords: siteCopy.meta.keywords,
+  title: "Danny Creative | Creative Branding Agency",
+  description:
+    "Bold strategies. Stunning visuals. Experiences that leave a lasting impression. We transform visions into movements.",
+  keywords: [
+    "branding agency",
+    "creative agency",
+    "brand identity",
+    "web design",
+    "visual design",
+    "brand strategy",
+  ],
   authors: [{ name: "Danny Creative" }],
-  creator: "Danny Creative",
-  publisher: "Danny Creative",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
   openGraph: {
-    type: "website",
-    locale: "en_GB",
+    title: "Danny Creative | Creative Branding Agency",
+    description:
+      "Bold strategies. Stunning visuals. Experiences that leave a lasting impression.",
     url: "https://dannycreative.com",
     siteName: "Danny Creative",
-    title: siteCopy.meta.title,
-    description: siteCopy.meta.description,
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Danny Creative - Creative Branding Agency",
-      },
-    ],
+    locale: "en_US",
+    type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: siteCopy.meta.title,
-    description: siteCopy.meta.description,
-    images: ["/og-image.jpg"],
-    creator: "@dannycreative",
+    title: "Danny Creative | Creative Branding Agency",
+    description:
+      "Bold strategies. Stunning visuals. Experiences that leave a lasting impression.",
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
   },
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
-  },
-  manifest: "/site.webmanifest",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#FAF7F2",
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <html lang="en" className={`${inter.variable} ${tenorSans.variable}`}>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-      </head>
-      <body className="bg-dark-bg text-dark-text antialiased">
-        <MotionProvider>
-          <RoomProvider>
-            <SmoothScroll>
-              <ClientWrapper>
-                <Navigation />
-                <main>{children}</main>
-                <Footer />
-              </ClientWrapper>
-            </SmoothScroll>
-          </RoomProvider>
-        </MotionProvider>
+    <html lang="en" className={`${tenorSans.variable} ${inter.variable}`}>
+      <body>
+        <ClientWrapper>{children}</ClientWrapper>
       </body>
     </html>
   );

@@ -1,34 +1,39 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
-import { useRoom } from "@/context/RoomContext";
-import { useMotion } from "@/context/MotionContext";
-import { useIsMobile } from "@/hooks/useMediaQuery";
-import LazyFluidDistortion from "@/components/effects/LazyFluidDistortion";
+import { Spark } from "@/components/effects/Spark";
+import { MobileSparkEffects } from "@/components/effects/MobileSpark";
+import { AmbientOrbs } from "@/components/effects/AmbientOrbs";
 
 interface ClientWrapperProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
-export default function ClientWrapper({ children }: ClientWrapperProps) {
-  const { room } = useRoom();
-  const { motionEnabled } = useMotion();
-  const isMobile = useIsMobile();
-  const [isHydrated, setIsHydrated] = useState(false);
-
-  // Wait for hydration to prevent SSR mismatch
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
-
-  // Reduce effects on mobile for performance
-  const showDistortion = isHydrated && motionEnabled && !isMobile;
-
+/**
+ * ClientWrapper - Wraps the application with client-side effects
+ *
+ * This component handles:
+ * - The Spark cursor companion (desktop)
+ * - Mobile tap ripple and glow effects (mobile)
+ * - Ambient background orbs (atmospheric depth)
+ * - Smooth scroll provider (to be added later)
+ * - Any other global client-side effects
+ */
+export function ClientWrapper({ children }: ClientWrapperProps) {
   return (
     <>
-      {showDistortion && <LazyFluidDistortion enabled={showDistortion} />}
+      {/* Ambient Background Orbs - Behind everything */}
+      <AmbientOrbs />
+
+      {/* The Spark - Desktop cursor companion */}
+      <Spark />
+
+      {/* Mobile Spark Effects - Tap ripple and element glow */}
+      <MobileSparkEffects />
+
+      {/* Main content */}
       {children}
     </>
   );
 }
+
+export default ClientWrapper;

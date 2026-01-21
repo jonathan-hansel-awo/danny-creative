@@ -1,8 +1,13 @@
+import { MobileTapRipple } from './MobileSpark';
 export { default as SmoothScroll } from "./SmoothScroll";
 export { default as ParallaxWrapper } from "./ParallaxWrapper";
 export { default as RevealOnScroll } from "./RevealOnScroll";
 export { default as RevealGroup } from "./RevealGroup";
-export { default as ParticleField } from "./ParticleField";
 export { default as FluidDistortion } from "./FluidDistortion";
 export { default as RoomSection } from "./RoomSection";
 export { default as SectionTransition } from "./SectionTransition";
+export { default as Spark } from "./Spark";
+export { default as SparkTrail } from "./Spark";
+export { default as AmbientOrbs } from "./AmbientOrbs";
+export { default as MobileTapRipple, useSparkGlow } from "./MobileSpark";
+export { default as LazyFluidDistortion } from "./LazyFluidDistortion";
