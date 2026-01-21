@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
+import React from "react";
 import { useTouchDevice, useReducedMotion } from "@/hooks/useDeviceDetection";
 
 /**
@@ -135,7 +136,7 @@ export function useSparkGlow() {
 interface SparkGlowWrapperProps {
   children: React.ReactNode;
   className?: string;
-  as?: keyof JSX.IntrinsicElements;
+  as?: React.ElementType;
   disabled?: boolean;
 }
 
@@ -149,17 +150,17 @@ export function SparkGlowWrapper({
   const prefersReducedMotion = useReducedMotion();
 
   if (prefersReducedMotion || disabled) {
-    return <Component className={className}>{children}</Component>;
+    return React.createElement(Component as React.ElementType, { className }, children);
   }
 
-  return (
-    <Component
-      className={`spark-glow-element ${glowClassName} ${className}`}
-      {...glowHandlers}
-      data-spark-glow
-    >
-      {children}
-    </Component>
+  return React.createElement(
+    Component as React.ElementType,
+    {
+      className: `spark-glow-element ${glowClassName} ${className}`,
+      ...glowHandlers,
+      "data-spark-glow": true,
+    },
+    children
   );
 }
 
