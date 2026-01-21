@@ -1,6 +1,6 @@
-export { default as Hero } from "./Hero";
-export { default as About } from "./About";
-export { default as Work } from "./Work";
-export { default as Services } from "./Services";
-export { default as Testimonials } from "./Testimonials";
-export { default as Contact } from "./Contact";
+export { Hero } from "./Hero";
+export { Work } from "./Work";
+export { Services } from "./Services";
+export { About } from "./About";
+export { Testimonials } from "./Testimonials";
+export { Contact } from "./Contact";

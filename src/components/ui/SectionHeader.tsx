@@ -1,75 +1,38 @@
-"use client";
-
-import { ReactNode } from "react";
-import { cn } from "@/lib/utils";
-import RevealOnScroll from "@/components/effects/RevealOnScroll";
-
 interface SectionHeaderProps {
-  eyebrow?: string;
-  headline: ReactNode;
-  subhead?: string;
+  eyebrow: string;
+  headline: string;
+  subheadline?: string;
   align?: "left" | "center";
   className?: string;
 }
 
-export default function SectionHeader({
+export function SectionHeader({
   eyebrow,
   headline,
-  subhead,
+  subheadline,
   align = "left",
   className = "",
 }: SectionHeaderProps) {
-  const alignmentStyles = {
-    left: "text-left",
-    center: "text-center mx-auto",
-  };
+  const alignmentClasses = align === "center" ? "text-center mx-auto" : "";
 
   return (
-    <div className={cn("max-w-3xl", alignmentStyles[align], className)}>
-      {eyebrow && (
-        <RevealOnScroll animation="fade-up" delay={0}>
-          <span
-            className={cn(
-              "inline-block",
-              "text-label font-body font-semibold uppercase tracking-wider",
-              "text-coral",
-              "mb-4",
-            )}
-          >
-            {eyebrow}
-          </span>
-        </RevealOnScroll>
-      )}
+    <header className={`max-w-[672px] ${alignmentClasses} ${className}`}>
+      {/* Eyebrow */}
+      <p className="font-ui text-[0.8125rem] font-medium tracking-[0.1em] uppercase text-spark mb-4">
+        {eyebrow}
+      </p>
 
-      <RevealOnScroll animation="fade-up" delay={0.1}>
-        <h2
-          className={cn(
-            "font-display",
-            "text-display-l",
-            "leading-tight",
-            "mb-6",
-            // Responsive sizing
-            "text-[2rem] sm:text-[2.5rem] md:text-display-l",
-          )}
-        >
-          {headline}
-        </h2>
-      </RevealOnScroll>
+      {/* Headline */}
+      <h2 className="font-display text-display-lg leading-[1.05] tracking-[-0.02em] text-ink mb-6">
+        {headline}
+      </h2>
 
-      {subhead && (
-        <RevealOnScroll animation="fade-up" delay={0.2}>
-          <p
-            className={cn(
-              "text-body-l font-body",
-              "opacity-70",
-              "max-w-xl",
-              align === "center" && "mx-auto",
-            )}
-          >
-            {subhead}
-          </p>
-        </RevealOnScroll>
+      {/* Subheadline (optional) */}
+      {subheadline && (
+        <p className="text-body-lg leading-relaxed text-ink-light">
+          {subheadline}
+        </p>
       )}
-    </div>
+    </header>
   );
 }

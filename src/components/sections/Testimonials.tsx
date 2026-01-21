@@ -1,154 +1,98 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
-import RoomSection from "@/components/effects/RoomSection";
-import SectionHeader from "@/components/ui/SectionHeader";
-import TestimonialCard from "@/components/ui/TestimonialCard";
-import RevealOnScroll from "@/components/effects/RevealOnScroll";
-import { testimonials } from "@/data/testimonials";
-import { siteCopy } from "@/data/copy";
+import { useState, useEffect, useCallback } from "react";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { TestimonialCard } from "@/components/ui/TestimonialCard";
 
-export default function Testimonials() {
+const testimonials = [
+  {
+    quote:
+      "Working with Danny Creative transformed how we think about our brand. They didn't just design a logo — they gave us a story to tell.",
+    author: "Sarah Chen",
+    title: "Founder",
+    company: "Bloom Hotels",
+  },
+  {
+    quote:
+      "The team understood our vision from day one. Our new identity has helped us stand out in a crowded market.",
+    author: "Marcus Webb",
+    title: "CEO",
+    company: "Velocity Auto",
+  },
+  {
+    quote:
+      "Professional, creative, and genuinely invested in our success. Couldn't recommend them more highly.",
+    author: "Elena Rodriguez",
+    title: "Marketing Director",
+    company: "Summit Retail",
+  },
+];
+
+export function Testimonials() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const copy = siteCopy.testimonials;
+  const [isPaused, setIsPaused] = useState(false);
 
-  const nextTestimonial = () => {
+  const nextTestimonial = useCallback(() => {
     setActiveIndex((prev) => (prev + 1) % testimonials.length);
-  };
+  }, []);
 
-  const prevTestimonial = () => {
-    setActiveIndex(
-      (prev) => (prev - 1 + testimonials.length) % testimonials.length,
-    );
-  };
+  // Auto-advance every 6 seconds
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(nextTestimonial, 6000);
+    return () => clearInterval(interval);
+  }, [isPaused, nextTestimonial]);
 
   return (
-    <RoomSection id="testimonials" room="dark" className="py-32 md:py-40">
-      {/* Transition gradient from light */}
-      <div
-        className="absolute top-0 left-0 right-0 h-32 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(to bottom, var(--color-light-bg), var(--color-dark-bg))",
-        }}
-      />
-
-      <div className="relative max-w-7xl mx-auto px-6">
+    <section id="testimonials" className="section-padding bg-cream-dark">
+      <div className="container-md">
         {/* Header */}
-        <div className="mb-16 md:mb-20">
-          <SectionHeader
-            eyebrow={copy.eyebrow}
-            headline={
-              <>
-                {copy.headline[0]}
-                <br />
-                <span className="text-coral">{copy.headline[1]}</span>
-              </>
-            }
-            align="left"
-          />
-        </div>
+        <SectionHeader
+          eyebrow="Kind Words"
+          headline="What our partners say."
+          align="center"
+          className="mb-16"
+        />
 
-        {/* Testimonial Carousel */}
-        <div className="relative">
-          {/* Cards */}
-          <div className="relative min-h-[400px] md:min-h-[350px]">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeIndex}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
-                transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="max-w-3xl"
+        {/* Testimonial */}
+        <div
+          className="max-w-[720px] mx-auto"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          <div className="relative min-h-[200px]">
+            {testimonials.map((testimonial, index) => (
+              <div
+                key={testimonial.author}
+                className={`transition-all duration-500 ${
+                  index === activeIndex
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-4 absolute inset-0 pointer-events-none"
+                }`}
               >
-                <TestimonialCard testimonial={testimonials[activeIndex]} />
-              </motion.div>
-            </AnimatePresence>
+                <TestimonialCard {...testimonial} />
+              </div>
+            ))}
           </div>
 
-          {/* Navigation */}
-          <RevealOnScroll animation="fade-up" delay={0.3}>
-            <div className="flex items-center justify-between mt-12 pt-8 border-t border-dark-text/10">
-              {/* Dots */}
-              <div className="flex gap-3">
-                {testimonials.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveIndex(index)}
-                    className={cn(
-                      "w-2 h-2 rounded-full",
-                      "transition-all duration-300",
-                      index === activeIndex
-                        ? "bg-coral w-8"
-                        : "bg-dark-text/30 hover:bg-dark-text/50",
-                    )}
-                    aria-label={`Go to testimonial ${index + 1}`}
-                  />
-                ))}
-              </div>
-
-              {/* Arrows */}
-              <div className="flex gap-4">
-                <button
-                  onClick={prevTestimonial}
-                  className={cn(
-                    "w-12 h-12 rounded-full",
-                    "border border-dark-text/20",
-                    "flex items-center justify-center",
-                    "text-dark-text/60",
-                    "transition-all duration-300",
-                    "hover:border-coral hover:text-coral",
-                  )}
-                  aria-label="Previous testimonial"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={1.5}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15 19l-7-7 7-7"
-                    />
-                  </svg>
-                </button>
-                <button
-                  onClick={nextTestimonial}
-                  className={cn(
-                    "w-12 h-12 rounded-full",
-                    "border border-dark-text/20",
-                    "flex items-center justify-center",
-                    "text-dark-text/60",
-                    "transition-all duration-300",
-                    "hover:border-coral hover:text-coral",
-                  )}
-                  aria-label="Next testimonial"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={1.5}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </RevealOnScroll>
+          {/* Navigation Dots */}
+          <div className="flex justify-center gap-3 mt-12">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                  index === activeIndex
+                    ? "bg-spark scale-110"
+                    : "bg-ink-muted/30 hover:bg-ink-muted/50"
+                }`}
+                onClick={() => setActiveIndex(index)}
+                aria-label={`Go to testimonial ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </RoomSection>
+    </section>
   );
 }

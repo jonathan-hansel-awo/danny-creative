@@ -1,104 +1,77 @@
-'use client';
+import Link from "next/link";
 
-import { cn } from '@/lib/utils';
-import { useLenis } from '@/hooks/useLenis';
+const footerLinks = {
+  navigation: [
+    { label: "Work", href: "#work" },
+    { label: "Services", href: "#services" },
+    { label: "About", href: "#about" },
+    { label: "Contact", href: "#contact" },
+  ],
+  social: [
+    { label: "Instagram", href: "https://instagram.com" },
+    { label: "LinkedIn", href: "https://linkedin.com" },
+    { label: "Twitter", href: "https://twitter.com" },
+    { label: "Dribbble", href: "https://dribbble.com" },
+  ],
+};
 
-const navLinks = [
-  { label: 'Work', href: '#work' },
-  { label: 'Services', href: '#services' },
-  { label: 'About', href: '#about' },
-  { label: 'Contact', href: '#contact' },
-];
-
-const socialLinks = [
-  { label: 'Instagram', href: 'https://instagram.com' },
-  { label: 'Twitter', href: 'https://twitter.com' },
-  { label: 'LinkedIn', href: 'https://linkedin.com' },
-  { label: 'Dribbble', href: 'https://dribbble.com' },
-];
-
-export default function Footer() {
-  const { scrollTo } = useLenis();
-
-  const handleNavClick = (href: string) => {
-    if (href.startsWith('#')) {
-      const target = document.querySelector(href);
-      if (target) {
-        scrollTo(target as HTMLElement, { offset: -80 });
-      }
-    }
-  };
-
-  const currentYear = new Date().getFullYear();
-
+export function Footer() {
   return (
-    <footer className="bg-light-bg text-light-text">
-      <div className="max-w-7xl mx-auto px-6 py-20">
-        {/* Main Footer Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          {/* Column 1: Logo & Description */}
-          <div className="lg:col-span-2">
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollTo(0, { duration: 1.5 });
-              }}
-              className="inline-block text-3xl font-display mb-4"
+    <footer className="bg-cream-dark border-t border-ink/10">
+      {/* Main Footer */}
+      <div className="container-xl py-16 md:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+          {/* Brand Column */}
+          <div className="lg:col-span-1">
+            {/* Logo */}
+            <Link
+              href="/"
+              className="font-display text-[1.75rem] text-ink inline-flex items-center mb-4"
             >
-              Danny<span className="text-coral">.</span>
-            </a>
-            <p className="text-light-text/70 max-w-sm leading-relaxed">
-              A creative branding agency obsessed with making brands that people
-              can&apos;t stop talking about. Bold strategies, stunning visuals,
-              unforgettable experiences.
+              Danny
+              <span
+                className="inline-block w-2 h-2 rounded-full bg-spark ml-0.5 mb-1"
+                style={{ boxShadow: "0 0 4px rgba(232, 165, 75, 0.6)" }}
+              />
+            </Link>
+            <p className="text-body-sm text-ink-light max-w-[280px]">
+              The creative spark behind bold brands. Strategy, identity, and
+              digital experiences that make people take notice.
             </p>
           </div>
 
-          {/* Column 2: Navigation */}
+          {/* Navigation */}
           <div>
-            <h4 className="text-sm font-body font-semibold uppercase tracking-wider mb-6">
+            <h4 className="font-ui text-sm font-medium text-ink mb-4">
               Navigation
             </h4>
             <ul className="space-y-3">
-              {navLinks.map((link) => (
+              {footerLinks.navigation.map((link) => (
                 <li key={link.href}>
-                  <a
+                  <Link
                     href={link.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleNavClick(link.href);
-                    }}
-                    className={cn(
-                      'text-light-text/70',
-                      'transition-colors duration-300',
-                      'hover:text-coral'
-                    )}
+                    className="text-body-sm text-ink-light hover:text-spark transition-colors duration-300"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Column 3: Connect */}
+          {/* Social */}
           <div>
-            <h4 className="text-sm font-body font-semibold uppercase tracking-wider mb-6">
+            <h4 className="font-ui text-sm font-medium text-ink mb-4">
               Connect
             </h4>
             <ul className="space-y-3">
-              {socialLinks.map((link) => (
-                <li key={link.label}>
+              {footerLinks.social.map((link) => (
+                <li key={link.href}>
                   <a
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={cn(
-                      'text-light-text/70',
-                      'transition-colors duration-300',
-                      'hover:text-coral'
-                    )}
+                    className="text-body-sm text-ink-light hover:text-spark transition-colors duration-300"
                   >
                     {link.label}
                   </a>
@@ -106,36 +79,53 @@ export default function Footer() {
               ))}
             </ul>
           </div>
-        </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-light-text/10">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-light-text/50">
-              © {currentYear} Danny Creative. All rights reserved.
-            </p>
-            <div className="flex gap-6">
-              <a
-                href="/privacy"
-                className={cn(
-                  'text-sm text-light-text/50',
-                  'transition-colors duration-300',
-                  'hover:text-coral'
-                )}
-              >
-                Privacy Policy
-              </a>
-              <a
-                href="/terms"
-                className={cn(
-                  'text-sm text-light-text/50',
-                  'transition-colors duration-300',
-                  'hover:text-coral'
-                )}
-              >
-                Terms of Service
-              </a>
-            </div>
+          {/* Contact */}
+          <div>
+            <h4 className="font-ui text-sm font-medium text-ink mb-4">
+              Contact
+            </h4>
+            <ul className="space-y-3">
+              <li>
+                <a
+                  href="mailto:hello@dannycreative.com"
+                  className="text-body-sm text-ink-light hover:text-spark transition-colors duration-300"
+                >
+                  hello@dannycreative.com
+                </a>
+              </li>
+              <li>
+                <a
+                  href="tel:+1234567890"
+                  className="text-body-sm text-ink-light hover:text-spark transition-colors duration-300"
+                >
+                  +1 (234) 567-890
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Bar */}
+      <div className="border-t border-ink/10">
+        <div className="container-xl py-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-caption text-ink-muted">
+            © {new Date().getFullYear()} Danny Creative. All rights reserved.
+          </p>
+          <div className="flex gap-6">
+            <Link
+              href="/privacy"
+              className="text-caption text-ink-muted hover:text-spark transition-colors duration-300"
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              href="/terms"
+              className="text-caption text-ink-muted hover:text-spark transition-colors duration-300"
+            >
+              Terms of Service
+            </Link>
           </div>
         </div>
       </div>

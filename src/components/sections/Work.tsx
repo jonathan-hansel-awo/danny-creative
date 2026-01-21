@@ -1,69 +1,78 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import RoomSection from "@/components/effects/RoomSection";
-import SectionHeader from "@/components/ui/SectionHeader";
-import ProjectCard from "@/components/ui/ProjectCard";
-import Button from "@/components/ui/Button";
-import RevealOnScroll from "@/components/effects/RevealOnScroll";
-import { getFeaturedProjects } from "@/data/projects";
-import { siteCopy } from "@/data/copy";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { ProjectCard } from "@/components/ui/ProjectCard";
+import Link from "next/link";
 
-export default function Work() {
-  const projects = getFeaturedProjects(6);
-  const copy = siteCopy.work;
+const projects = [
+  {
+    title: "Bloom Hotels",
+    category: "Hospitality",
+    year: "2024",
+    image: "/images/projects/bloom.jpg",
+    href: "/work/bloom-hotels",
+  },
+  {
+    title: "Velocity Auto",
+    category: "Automotive",
+    year: "2024",
+    image: "/images/projects/velocity.jpg",
+    href: "/work/velocity-auto",
+  },
+  {
+    title: "Greenhouse Cafe",
+    category: "Food & Beverage",
+    year: "2023",
+    image: "/images/projects/greenhouse.jpg",
+    href: "/work/greenhouse-cafe",
+  },
+  {
+    title: "Summit Retail",
+    category: "Retail",
+    year: "2023",
+    image: "/images/projects/summit.jpg",
+    href: "/work/summit-retail",
+  },
+];
 
+export function Work() {
   return (
-    <RoomSection id="work" room="dark" className="py-32 md:py-40">
-      {/* Transition gradient from light */}
-      <div
-        className="absolute top-0 left-0 right-0 h-32 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(to bottom, var(--color-light-bg), var(--color-dark-bg))",
-        }}
-      />
-
-      <div className="relative max-w-7xl mx-auto px-6">
+    <section id="work" className="section-padding">
+      <div className="container-lg">
         {/* Header */}
-        <div className="mb-16 md:mb-20">
-          <SectionHeader
-            eyebrow={copy.eyebrow}
-            headline={
-              <>
-                {copy.headline[0]}
-                <br />
-                <span className="text-coral">{copy.headline[1]}</span>
-              </>
-            }
-            subhead={copy.subhead}
-            align="left"
-          />
-        </div>
+        <SectionHeader
+          eyebrow="Selected Work"
+          headline="Brands we've brought to life."
+          className="mb-16"
+        />
 
         {/* Project Grid */}
-        <div className="grid md:grid-cols-2 gap-8 md:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
-            <RevealOnScroll
-              key={project.id}
-              animation="scale"
-              delay={index * 0.1}
-              threshold={0.1}
+            <div
+              key={project.title}
+              className="reveal-hidden"
+              style={{ animationDelay: `${index * 100}ms` }}
             >
-              <ProjectCard project={project} priority={index < 2} />
-            </RevealOnScroll>
+              <ProjectCard {...project} />
+            </div>
           ))}
         </div>
 
-        {/* CTA */}
-        <RevealOnScroll animation="fade-up" delay={0.3}>
-          <div className="mt-16 text-center">
-            <Button variant="secondary" size="lg" href="/work">
-              {copy.cta}
-            </Button>
-          </div>
-        </RevealOnScroll>
+        {/* View All Link */}
+        <div className="mt-12 text-center">
+          <Link
+            href="/work"
+            className="inline-flex items-center gap-2 font-ui text-ink hover:text-spark transition-colors duration-300 group"
+            data-spark-hover
+          >
+            View All Projects
+            <span className="transition-transform duration-300 group-hover:translate-x-1">
+              →
+            </span>
+          </Link>
+        </div>
       </div>
-    </RoomSection>
+    </section>
   );
 }
