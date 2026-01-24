@@ -80,3 +80,28 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ========================================
+   HERO ANIMATION STYLES
+   ======================================== */
+
+.hero-word {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* Ensure smooth transitions on buttons */
+button {
+  will-change: transform, background-color;
+}
+
+/* Loading screen base */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: #1A1A1A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

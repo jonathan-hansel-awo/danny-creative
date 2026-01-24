@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useMemo } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { useRef, useMemo, useEffect } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Float } from "@react-three/drei";
 import {
   EffectComposer,
@@ -28,8 +28,19 @@ function FloatingShape({
   scale?: number;
 }) {
   const meshRef = useRef<THREE.Mesh>(null);
+  const materialRef = useRef<THREE.MeshStandardMaterial>(null);
+  const initialPosition = useRef(position);
+
   const cursorPosition = useStore((s) => s.cursorPosition);
   const isTouchDevice = useStore((s) => s.isTouchDevice);
+  const loadingPhase = useStore((s) => s.loadingPhase);
+
+  // Start invisible, fade in during spark-born phase
+  useEffect(() => {
+    if (materialRef.current) {
+      materialRef.current.opacity = 0;
+    }
+  }, []);
 
   const normalizedCursor = useMemo(() => {
     if (typeof window === "undefined") return { x: 0, y: 0 };
@@ -39,21 +50,42 @@ function FloatingShape({
     };
   }, [cursorPosition]);
 
-  useFrame(() => {
-    if (!meshRef.current) return;
+  useFrame((state) => {
+    if (!meshRef.current || !materialRef.current) return;
+
+    // Fade in based on loading phase
+    let targetOpacity = 0;
+    if (loadingPhase === "spark-born") {
+      targetOpacity = wireframe ? 0.4 : 0.6;
+    } else if (
+      loadingPhase === "content-revealing" ||
+      loadingPhase === "complete"
+    ) {
+      targetOpacity = wireframe ? 0.6 : 0.9;
+    }
+    materialRef.current.opacity +=
+      (targetOpacity - materialRef.current.opacity) * 0.02;
 
     // Slow rotation
     meshRef.current.rotation.x += 0.001;
     meshRef.current.rotation.y += 0.0007;
 
-    // Cursor attraction (desktop)
-    if (!isTouchDevice) {
-      const targetX = position[0] + normalizedCursor.x * 0.4;
-      const targetY = position[1] + normalizedCursor.y * 0.4;
+    // Cursor attraction (desktop only, after loading)
+    if (!isTouchDevice && loadingPhase === "complete") {
+      const targetX = initialPosition.current[0] + normalizedCursor.x * 0.4;
+      const targetY = initialPosition.current[1] + normalizedCursor.y * 0.4;
       meshRef.current.position.x +=
         (targetX - meshRef.current.position.x) * 0.006;
       meshRef.current.position.y +=
         (targetY - meshRef.current.position.y) * 0.006;
+    }
+
+    // During loading, shapes drift outward slightly then back
+    if (loadingPhase === "spark-born" || loadingPhase === "content-revealing") {
+      const time = state.clock.elapsedTime;
+      const drift = Math.sin(time * 0.5) * 0.1;
+      meshRef.current.position.x = initialPosition.current[0] * (1 + drift);
+      meshRef.current.position.y = initialPosition.current[1] * (1 + drift);
     }
   });
 
@@ -75,12 +107,13 @@ function FloatingShape({
       <mesh ref={meshRef} position={position} scale={scale}>
         {geo}
         <meshStandardMaterial
+          ref={materialRef}
           color={color}
           emissive={emissive ? color : "#000000"}
           emissiveIntensity={emissive ? 0.5 : 0}
           wireframe={wireframe}
           transparent
-          opacity={wireframe ? 0.6 : 0.9}
+          opacity={0}
         />
       </mesh>
     </Float>
@@ -169,10 +202,15 @@ function Shapes() {
 }
 
 function Effects() {
+  const loadingPhase = useStore((s) => s.loadingPhase);
+
+  // Adjust bloom based on loading phase
+  const bloomIntensity = loadingPhase === "complete" ? 0.4 : 0.6;
+
   return (
     <EffectComposer>
       <Bloom
-        intensity={0.4}
+        intensity={bloomIntensity}
         luminanceThreshold={0.8}
         luminanceSmoothing={0.9}
         radius={0.8}
@@ -181,6 +219,23 @@ function Effects() {
       <Vignette darkness={0.3} offset={0.5} />
     </EffectComposer>
   );
+}
+
+// Component to signal scene is ready
+function SceneReadySignal() {
+  const setSceneReady = useStore((s) => s.setSceneReady);
+  const { gl } = useThree();
+
+  useEffect(() => {
+    // Signal ready after a short delay to ensure everything is loaded
+    const timer = setTimeout(() => {
+      setSceneReady(true);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [setSceneReady, gl]);
+
+  return null;
 }
 
 export function Scene() {
@@ -197,6 +252,7 @@ export function Scene() {
         }}
         dpr={[1, isTouchDevice ? 1.5 : 2]}
       >
+        <SceneReadySignal />
         <ambientLight intensity={0.4} color="#FFF9F0" />
         <directionalLight position={[5, 5, 5]} intensity={0.6} />
         <directionalLight

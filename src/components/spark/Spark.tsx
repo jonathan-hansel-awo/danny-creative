@@ -25,6 +25,7 @@ export function Spark() {
   const setCursorPosition = useStore((s) => s.setCursorPosition);
   const isHoveringInteractive = useStore((s) => s.isHoveringInteractive);
   const setIsHoveringInteractive = useStore((s) => s.setIsHoveringInteractive);
+  const loadingPhase = useStore((s) => s.loadingPhase);
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
     const now = performance.now();
@@ -197,7 +198,7 @@ export function Spark() {
     };
   }, [isTouchDevice, handleMouseMove, handleMouseOver, animate]);
 
-  if (isTouchDevice) return null;
+if (isTouchDevice || loadingPhase !== "complete") return null;
 
-  return <canvas ref={canvasRef} className="spark-cursor" aria-hidden="true" />;
+return <canvas ref={canvasRef} className="spark-cursor" aria-hidden="true" />;
 }
