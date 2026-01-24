@@ -1,4 +1,5 @@
 import { Hero } from "@/components/sections/Hero";
+import { Work } from "@/components/sections/Work";
 
 export default function Home() {
   return (
@@ -6,28 +7,11 @@ export default function Home() {
       {/* Hero Section */}
       <Hero />
 
-      {/* Placeholder sections for scroll testing */}
-      <section className="min-h-screen flex items-center justify-center px-6">
-        <div className="max-w-4xl text-center">
-          <p
-            className="text-sm tracking-[0.2em] uppercase mb-6"
-            style={{
-              color: "var(--color-spark)",
-              fontFamily: "Inter, sans-serif",
-            }}
-          >
-            Selected Work
-          </p>
-          <h2
-            className="text-4xl md:text-6xl"
-            style={{ color: "var(--color-ink)" }}
-          >
-            Brands we&apos;ve brought to life.
-          </h2>
-        </div>
-      </section>
+      {/* Work Section */}
+      <Work />
 
-      <section className="min-h-screen flex items-center justify-center px-6">
+      {/* Placeholder sections for remaining content */}
+      <section className="min-h-screen flex items-center justify-center px-6 bg-[var(--color-cream)]">
         <div className="max-w-4xl text-center">
           <p
             className="text-sm tracking-[0.2em] uppercase mb-6"
@@ -47,7 +31,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="min-h-screen flex items-center justify-center px-6">
+      <section className="min-h-screen flex items-center justify-center px-6 bg-[var(--color-cream)]">
         <div className="max-w-4xl text-center">
           <h2
             className="text-4xl md:text-6xl italic"
@@ -59,7 +43,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="min-h-screen flex items-center justify-center px-6">
+      <section className="min-h-screen flex items-center justify-center px-6 bg-[var(--color-cream)]">
         <div className="max-w-4xl text-center">
           <h2
             className="text-4xl md:text-6xl mb-8"

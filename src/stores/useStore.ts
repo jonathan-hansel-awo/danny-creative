@@ -33,6 +33,22 @@ interface AppState {
   // Scene
   sceneReady: boolean;
   setSceneReady: (ready: boolean) => void;
+
+  // Sections
+  currentSection:
+    | "hero"
+    | "work"
+    | "services"
+    | "about"
+    | "testimonials"
+    | "contact";
+  setCurrentSection: (section: AppState["currentSection"]) => void;
+
+  // Work Section
+  activeProjectIndex: number;
+  workProgress: number;
+  setActiveProjectIndex: (index: number) => void;
+  setWorkProgress: (progress: number) => void;
 }
 
 export const useStore = create<AppState>((set) => ({
@@ -65,4 +81,14 @@ export const useStore = create<AppState>((set) => ({
   // Scene
   sceneReady: false,
   setSceneReady: (ready) => set({ sceneReady: ready }),
+
+  // Sections
+  currentSection: "hero",
+  setCurrentSection: (section) => set({ currentSection: section }),
+
+  // Work Section
+  activeProjectIndex: 0,
+  workProgress: 0,
+  setActiveProjectIndex: (index) => set({ activeProjectIndex: index }),
+  setWorkProgress: (progress) => set({ workProgress: progress }),
 }));

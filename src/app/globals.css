@@ -38,6 +38,23 @@ body {
   outline-offset: 2px;
 }
 
+/* ========================================
+   LAYERING - Critical for depth
+   ======================================== */
+
+/* Three.js canvas - background layer */
+.three-canvas,
+.fixed canvas {
+  z-index: 0 !important;
+}
+
+/* Content sits above 3D */
+.content-layer {
+  position: relative;
+  z-index: 10;
+}
+
+/* Spark cursor on top */
 .spark-cursor {
   pointer-events: none;
   position: fixed;
@@ -56,28 +73,17 @@ body {
   cursor: none;
 }
 
-.three-canvas {
-  position: fixed !important;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.content-layer {
-  position: relative;
-  z-index: 1;
-}
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
 
 @media (prefers-reduced-motion: reduce) {
 
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
+    animation-duration: 10ms !important;
+    transition-duration: 10ms !important;
   }
 }
 
@@ -104,4 +110,31 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* ========================================
+   WORK SECTION STYLES
+   ======================================== */
+
+.work-gallery {
+  will-change: transform;
+}
+
+.project-card {
+  will-change: transform, opacity;
+}
+
+/* Smooth image reveal */
+.image-reveal {
+  clip-path: inset(100% 0% 0% 0%);
+  transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.image-reveal.revealed {
+  clip-path: inset(0% 0% 0% 0%);
+}
+
+/* Progress bar glow effect */
+.progress-bar {
+  box-shadow: 0 0 10px var(--color-spark-glow);
 }

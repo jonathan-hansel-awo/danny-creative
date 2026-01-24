@@ -1,140 +1,110 @@
-/* eslint-disable prefer-const */
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 import { useStore } from "@/stores/useStore";
 
 export function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const eyebrowRef = useRef<HTMLParagraphElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const subheadlineRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
 
-  const [animationStarted, setAnimationStarted] = useState(false);
-
+  const hasAnimatedRef = useRef(false);
   const loadingPhase = useStore((s) => s.loadingPhase);
-  const setHeroAnimationComplete = useStore((s) => s.setHeroAnimationComplete);
 
   useEffect(() => {
-    if (loadingPhase !== "content-revealing" || animationStarted) return;
+    if (loadingPhase !== "content-revealing") return;
+    if (hasAnimatedRef.current) return;
 
-    setAnimationStarted(true);
+    hasAnimatedRef.current = true;
 
-    // Set initial states
-    const elements = [
-      eyebrowRef.current,
-      headlineRef.current,
-      subheadlineRef.current,
-      ctaRef.current,
-      scrollIndicatorRef.current,
-    ].filter(Boolean);
+    const tl = gsap.timeline({ delay: 0.2 });
 
-    gsap.set(elements, { opacity: 0, y: 40 });
-
-    // Get headline words
-    const headline = headlineRef.current;
-    if (headline) {
-      const text = headline.innerHTML;
-      const words = text
-        .split(/(<br\s*\/?>|\s+)/)
-        .filter((word) => word.trim() && !word.match(/<br\s*\/?>/));
-
-      // Wrap each word in a span
-      let wordIndex = 0;
-      headline.innerHTML = text.replace(/(\S+)/g, (match) => {
-        if (match.match(/<[^>]+>/)) return match; // Skip HTML tags
-        return `<span class="hero-word" style="display: inline-block; opacity: 0; transform: translateY(40px);">${match}</span>`;
+    if (eyebrowRef.current) {
+      gsap.set(eyebrowRef.current, { opacity: 0, y: 25 });
+      tl.to(eyebrowRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power3.out",
       });
     }
 
-    // Create timeline
-    const tl = gsap.timeline({
-      delay: 0.3, // Small delay after loader starts fading
-      onComplete: () => setHeroAnimationComplete(true),
-    });
-
-    // Eyebrow
-    tl.to(eyebrowRef.current, {
-      opacity: 1,
-      y: 0,
-      duration: 0.8,
-      ease: "power3.out",
-    });
-
-    // Headline words - staggered
-    const words = headline?.querySelectorAll(".hero-word");
-    if (words) {
+    if (headlineRef.current) {
+      gsap.set(headlineRef.current, { opacity: 0, y: 35 });
       tl.to(
-        words,
+        headlineRef.current,
         {
           opacity: 1,
           y: 0,
           duration: 1,
-          stagger: 0.12,
           ease: "power3.out",
         },
-        "-=0.4",
+        "-=0.5",
       );
     }
 
-    // Subheadline
-    tl.to(
-      subheadlineRef.current,
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power3.out",
-      },
-      "-=0.5",
-    );
+    if (subheadlineRef.current) {
+      gsap.set(subheadlineRef.current, { opacity: 0, y: 25 });
+      tl.to(
+        subheadlineRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power3.out",
+        },
+        "-=0.6",
+      );
+    }
 
-    // CTAs
-    tl.to(
-      ctaRef.current,
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power3.out",
-      },
-      "-=0.4",
-    );
+    if (ctaRef.current) {
+      gsap.set(ctaRef.current, { opacity: 0, y: 25 });
+      tl.to(
+        ctaRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power3.out",
+        },
+        "-=0.5",
+      );
+    }
 
-    // Scroll indicator (delayed)
-    tl.to(
-      scrollIndicatorRef.current,
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power3.out",
-      },
-      "-=0.2",
-    );
+    if (scrollIndicatorRef.current) {
+      gsap.set(scrollIndicatorRef.current, { opacity: 0 });
+      tl.to(
+        scrollIndicatorRef.current,
+        {
+          opacity: 1,
+          duration: 0.6,
+          ease: "power2.out",
+        },
+        "-=0.2",
+      );
+    }
 
     return () => {
       tl.kill();
     };
-  }, [loadingPhase, animationStarted, setHeroAnimationComplete]);
+  }, [loadingPhase]);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative min-h-screen flex items-center justify-center px-6"
-    >
-      <div className="max-w-4xl text-center">
+    <section className="relative min-h-screen flex items-center justify-center px-6">
+      <div ref={contentRef} className="max-w-4xl text-center relative z-10">
         {/* Eyebrow */}
         <p
           ref={eyebrowRef}
-          className="text-sm font-medium tracking-[0.2em] uppercase mb-6 opacity-0"
+          className="text-sm font-semibold tracking-[0.2em] uppercase mb-6"
           style={{
-            color: "var(--color-spark)",
+            color: "#D4940F", // Darker, more saturated spark
             fontFamily: "Inter, sans-serif",
+            opacity: 1,
+            textShadow: "0 1px 2px rgba(255,255,255,0.8)", // Subtle lift from background
           }}
         >
           Creative Branding Agency
@@ -143,24 +113,27 @@ export function Hero() {
         {/* Headline */}
         <h1
           ref={headlineRef}
-          className="text-5xl md:text-7xl lg:text-8xl leading-[0.95] mb-8 opacity-0"
+          className="text-5xl md:text-7xl lg:text-8xl leading-[0.95] mb-8"
           style={{
-            color: "var(--color-ink)",
-            fontFamily: "Tenor Sans, Georgia, serif",
+            color: "#0F0F0F", // Darker than var(--color-ink)
+            fontFamily: "Tenor Sans",
+            opacity: 1,
+            textShadow: "0 2px 4px rgba(255,255,255,0.5)", // Lift from background
           }}
         >
           We make brands
           <br />
-          <span style={{ color: "var(--color-spark)" }}>people remember.</span>
+          <span style={{ color: "#D4940F" }}>that win hearts.</span>
         </h1>
 
         {/* Subheadline */}
         <p
           ref={subheadlineRef}
-          className="text-lg md:text-xl max-w-2xl mx-auto mb-12 opacity-0"
+          className="text-lg md:text-xl max-w-2xl mx-auto mb-12"
           style={{
-            color: "var(--color-ink-light)",
+            color: "#3A3A3A", // Darker than var(--color-ink-light)
             lineHeight: 1.7,
+            opacity: 0,
           }}
         >
           Strategy, identity, and digital experiences for businesses that refuse
@@ -170,30 +143,27 @@ export function Hero() {
         {/* CTAs */}
         <div
           ref={ctaRef}
-          className="flex flex-col sm:flex-row gap-4 justify-center opacity-0"
+          className="flex flex-col sm:flex-row gap-4 justify-center"
+          style={{ opacity: 0 }}
         >
           <button
-            className="group relative px-8 py-4 rounded-full text-base font-medium overflow-hidden transition-all duration-700"
+            className="px-8 py-4 rounded-full text-base font-medium transition-all duration-500 hover:scale-105 hover:shadow-lg"
             style={{
-              backgroundColor: "var(--color-ink)",
+              backgroundColor: "#0F0F0F",
               color: "var(--color-cream)",
               fontFamily: "Inter, sans-serif",
             }}
             data-spark-hover
           >
-            <span className="relative z-10">See Our Work</span>
-            <div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-              style={{ backgroundColor: "var(--color-spark)" }}
-            />
+            See Our Work
           </button>
           <button
-            className="px-8 py-4 rounded-full text-base font-medium border-2 transition-all duration-700"
+            className="px-8 py-4 rounded-full text-base font-medium border-2 transition-all duration-500 hover:border-[#D4940F] hover:text-[#D4940F] hover:shadow-lg"
             style={{
-              borderColor: "var(--color-ink)",
-              color: "var(--color-ink)",
+              borderColor: "#0F0F0F",
+              color: "#0F0F0F",
               fontFamily: "Inter, sans-serif",
-              backgroundColor: "transparent",
+              backgroundColor: "rgba(250, 247, 242, 0.8)", // Slight background for contrast
             }}
             data-spark-hover
           >
@@ -205,45 +175,49 @@ export function Hero() {
       {/* Scroll Indicator */}
       <div
         ref={scrollIndicatorRef}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-0"
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10"
+        style={{ opacity: 0 }}
       >
         <span
-          className="text-xs tracking-[0.2em] uppercase"
+          className="text-xs tracking-[0.2em] uppercase font-medium"
           style={{
-            color: "var(--color-ink-muted)",
+            color: "#6A6A6A",
             fontFamily: "Inter, sans-serif",
           }}
         >
           Scroll
         </span>
-        <div className="scroll-line" />
+        <div className="relative w-px h-10">
+          {/* Track */}
+          <div
+            className="absolute inset-0 rounded-full"
+            style={{ backgroundColor: "rgba(0,0,0,0.1)" }}
+          />
+          {/* Animated bar */}
+          <div
+            className="absolute top-0 left-0 w-full rounded-full animate-scroll-pulse"
+            style={{
+              backgroundColor: "#D4940F",
+              height: "50%",
+            }}
+          />
+        </div>
       </div>
 
       <style jsx>{`
-        .scroll-line {
-          width: 1px;
-          height: 40px;
-          background: linear-gradient(
-            to bottom,
-            var(--color-spark) 0%,
-            var(--color-spark) 50%,
-            transparent 50%,
-            transparent 100%
-          );
-          background-size: 1px 16px;
-          animation: scrollPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes scrollPulse {
+        @keyframes scroll-pulse {
           0%,
           100% {
-            opacity: 0.4;
-            transform: scaleY(1);
+            transform: translateY(0);
+            opacity: 0.6;
           }
           50% {
+            transform: translateY(100%);
             opacity: 1;
-            transform: scaleY(1.2);
           }
+        }
+        .animate-scroll-pulse {
+          animation: scroll-pulse 2s ease-in-out infinite;
         }
       `}</style>
     </section>

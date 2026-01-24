@@ -1,55 +1,55 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useSyncExternalStore } from "react";
 import dynamic from "next/dynamic";
 import { SmoothScrollProvider } from "./SmoothScrollProvider";
 import { Spark } from "@/components/spark/Spark";
 import { AmbientSparks } from "@/components/spark/AmbientSparks";
 import { Loader } from "@/components/loader/Loader";
 import { useDeviceDetection } from "@/hooks/useDeviceDetection";
+import { useStore } from "@/stores/useStore";
 
 const Scene = dynamic(
   () => import("@/components/three/Scene").then((m) => m.Scene),
-  {
-    ssr: false,
-  },
+  { ssr: false },
 );
 
+// Helper to check if we're on the client
+function useIsClient() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+}
+
 export function ClientWrapper({ children }: { children: ReactNode }) {
-  const [mounted, setMounted] = useState(false);
+  const isClient = useIsClient();
+  const loadingPhase = useStore((s) => s.loadingPhase);
 
   useDeviceDetection();
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    // Show black screen before hydration
-    return (
-      <div
-        className="fixed inset-0 z-[9999]"
-        style={{ backgroundColor: "#1A1A1A" }}
-      />
-    );
+  // Server render or initial hydration
+  if (!isClient) {
+    return <div className="fixed inset-0 z-[9999] bg-[#1A1A1A]" />;
   }
+
+  const showContent =
+    loadingPhase === "content-revealing" || loadingPhase === "complete";
 
   return (
     <>
-      {/* Loader */}
       <Loader />
-
-      {/* 3D Background */}
       <Scene />
-
-      {/* Cursor Effects */}
       <Spark />
       <AmbientSparks />
-
-      {/* Smooth Scroll Content */}
       <SmoothScrollProvider>
-        <main className="content-layer">{children}</main>
+        <main
+          className="content-layer transition-opacity duration-700"
+          style={{ opacity: showContent ? 1 : 0 }}
+        >
+          {children}
+        </main>
       </SmoothScrollProvider>
     </>
   );
