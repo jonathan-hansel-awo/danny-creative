@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useMemo } from "react";
 import { gsap } from "@/lib/gsap";
 import { Project } from "@/data/projects";
 import { ProjectImage } from "@/components/ui/ProjectImage";
@@ -9,24 +9,28 @@ interface ProjectCardProps {
   project: Project;
   index: number;
   isActive: boolean;
+  // Track if this card has ever been active (passed from parent)
+  hasBeenActive: boolean;
 }
 
-export function ProjectCard({ project, index, isActive }: ProjectCardProps) {
+export function ProjectCard({
+  project,
+  index,
+  isActive,
+  hasBeenActive,
+}: ProjectCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const [isRevealed, setIsRevealed] = useState(false);
+  const hasAnimatedRef = useRef(false);
 
-  // Mark as revealed once active
-  useEffect(() => {
-    if (isActive) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsRevealed(true);
-    }
-  }, [isActive, isRevealed]);
+  // Card is revealed if it's currently active OR has been active before
+  const isRevealed = isActive || hasBeenActive;
 
-  // Content animation when active
+  // Content animation when becoming active
   useEffect(() => {
-    if (!isActive || !contentRef.current) return;
+    if (!isActive || !contentRef.current || hasAnimatedRef.current) return;
+
+    hasAnimatedRef.current = true;
 
     const elements = contentRef.current.querySelectorAll(".animate-item");
 
@@ -47,10 +51,10 @@ export function ProjectCard({ project, index, isActive }: ProjectCardProps) {
   return (
     <div
       ref={cardRef}
-      className="flex-shrink-0 w-[85vw] md:w-[75vw] lg:w-[70vw] h-full flex  items-center px-4 md:px-8"
+      className="flex-shrink-0 w-[85vw] md:w-[75vw] lg:w-[70vw] h-full flex items-center px-4 md:px-8"
     >
       <div
-        className="w-full h-[75vh] md:h-[70vh] flex flex-col lg:flex-row gap-8 mt-16 lg:gap-12 items-center transition-opacity duration-700"
+        className="w-full h-[75vh] md:h-[70vh] flex mt-16 flex-col lg:flex-row gap-8 lg:gap-12 items-center transition-opacity duration-700"
         style={{ opacity: isActive ? 1 : 0.25 }}
       >
         {/* Image */}
