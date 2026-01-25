@@ -5,8 +5,8 @@ export interface Project {
   category: string;
   year: string;
   description: string;
-  image: string;
-  color: string; // Accent color for this project
+  color: string;
+  accentColor: string;
 }
 
 export const projects: Project[] = [
@@ -18,8 +18,8 @@ export const projects: Project[] = [
     year: "2024",
     description:
       "A complete brand transformation for a boutique hotel chain seeking to capture the essence of modern luxury.",
-    image: "/projects/lumina.jpg",
     color: "#C9A87C",
+    accentColor: "#8B7355",
   },
   {
     id: "velocity-auto",
@@ -29,8 +29,8 @@ export const projects: Project[] = [
     year: "2024",
     description:
       "Bold automotive branding that speaks to a new generation of electric vehicle enthusiasts.",
-    image: "/projects/velocity.jpg",
     color: "#4A7C7E",
+    accentColor: "#2D5658",
   },
   {
     id: "botanica",
@@ -40,8 +40,8 @@ export const projects: Project[] = [
     year: "2023",
     description:
       "Organic skincare brand identity rooted in sustainability and natural beauty.",
-    image: "/projects/botanica.jpg",
     color: "#7D8471",
+    accentColor: "#5A6150",
   },
   {
     id: "nova-finance",
@@ -51,8 +51,8 @@ export const projects: Project[] = [
     year: "2023",
     description:
       "Fintech startup branding that makes complex financial services feel approachable.",
-    image: "/projects/nova.jpg",
     color: "#5B6CF9",
+    accentColor: "#3D4DB8",
   },
   {
     id: "artisan-coffee",
@@ -62,7 +62,7 @@ export const projects: Project[] = [
     year: "2023",
     description:
       "From bean to brand — a complete identity for specialty coffee roasters.",
-    image: "/projects/artisan.jpg",
     color: "#8B5A3C",
+    accentColor: "#5C3D28",
   },
 ];

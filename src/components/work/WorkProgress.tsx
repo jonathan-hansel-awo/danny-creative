@@ -8,8 +8,8 @@ export function WorkProgress() {
   const activeProjectIndex = useStore((s) => s.activeProjectIndex);
   const workProgress = useStore((s) => s.workProgress);
 
-  // Only show during work section
   const isVisible = currentSection === "work";
+  const totalProgress = (activeProjectIndex + workProgress) / projects.length;
 
   return (
     <div
@@ -20,29 +20,35 @@ export function WorkProgress() {
         pointerEvents: isVisible ? "auto" : "none",
       }}
     >
-      {/* Progress bar */}
-      <div className="relative w-48 md:w-64 h-[2px] bg-[var(--color-ink)]/10 rounded-full overflow-hidden">
-        <div
-          className="absolute top-0 left-0 h-full rounded-full transition-all duration-300"
-          style={{
-            width: `${((activeProjectIndex + workProgress) / projects.length) * 100}%`,
-            backgroundColor: "var(--color-spark)",
-          }}
-        />
+      {/* Progress dots */}
+      <div className="flex items-center gap-2">
+        {projects.map((_, index) => (
+          <button
+            key={index}
+            className="w-2 h-2 rounded-full transition-all duration-300"
+            style={{
+              backgroundColor:
+                index <= activeProjectIndex ? "#D4940F" : "rgba(0,0,0,0.15)",
+              transform:
+                index === activeProjectIndex ? "scale(1.5)" : "scale(1)",
+            }}
+            aria-label={`Go to project ${index + 1}`}
+          />
+        ))}
       </div>
+
+      {/* Divider */}
+      <div className="w-px h-4 bg-black/10" />
 
       {/* Counter */}
       <div
-        className="text-sm tabular-nums"
-        style={{
-          color: "var(--color-ink-muted)",
-          fontFamily: "Inter, sans-serif",
-        }}
+        className="text-sm tabular-nums font-medium"
+        style={{ color: "#6A6A6A" }}
       >
-        <span style={{ color: "var(--color-ink)" }}>
+        <span style={{ color: "#0F0F0F" }}>
           {String(activeProjectIndex + 1).padStart(2, "0")}
         </span>
-        <span className="mx-1">/</span>
+        <span className="mx-1 opacity-40">/</span>
         <span>{String(projects.length).padStart(2, "0")}</span>
       </div>
     </div>

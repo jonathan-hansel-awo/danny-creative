@@ -18,7 +18,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Danny Creative — Branding Agency",
-  description: "We make brands people remember.",
+  description: "We make brands that win hearts.",
 };
 
 export default function RootLayout({

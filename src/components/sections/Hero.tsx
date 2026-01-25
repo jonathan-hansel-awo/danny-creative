@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { gsap } from "@/lib/gsap";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useStore } from "@/stores/useStore";
 
 export function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const eyebrowRef = useRef<HTMLParagraphElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
@@ -13,13 +14,18 @@ export function Hero() {
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
 
   const hasAnimatedRef = useRef(false);
-  const loadingPhase = useStore((s) => s.loadingPhase);
+  const hasSetupScrollRef = useRef(false);
 
+  const loadingPhase = useStore((s) => s.loadingPhase);
+  const setCurrentSection = useStore((s) => s.setCurrentSection);
+
+  // Entrance animation
   useEffect(() => {
     if (loadingPhase !== "content-revealing") return;
     if (hasAnimatedRef.current) return;
 
     hasAnimatedRef.current = true;
+    setCurrentSection("hero");
 
     const tl = gsap.timeline({ delay: 0.2 });
 
@@ -91,20 +97,83 @@ export function Hero() {
     return () => {
       tl.kill();
     };
-  }, [loadingPhase]);
+  }, [loadingPhase, setCurrentSection]);
+
+  // Scroll-based exit animation
+  useEffect(() => {
+    if (loadingPhase !== "complete") return;
+    if (hasSetupScrollRef.current) return;
+
+    const section = sectionRef.current;
+    const content = contentRef.current;
+    const scrollIndicator = scrollIndicatorRef.current;
+
+    if (!section || !content) return;
+
+    hasSetupScrollRef.current = true;
+
+    // Content scales down and fades as you scroll
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1.5,
+        onUpdate: (self) => {
+          if (self.progress < 0.3) {
+            setCurrentSection("hero");
+          }
+        },
+      },
+    });
+
+    tl.to(
+      content,
+      {
+        scale: 0.9,
+        opacity: 0,
+        y: -60,
+        ease: "none",
+      },
+      0,
+    );
+
+    if (scrollIndicator) {
+      tl.to(
+        scrollIndicator,
+        {
+          opacity: 0,
+          y: 20,
+          ease: "none",
+        },
+        0,
+      );
+    }
+
+    return () => {
+      tl.kill();
+      ScrollTrigger.getAll().forEach((trigger) => {
+        if (trigger.vars.trigger === section) {
+          trigger.kill();
+        }
+      });
+    };
+  }, [loadingPhase, setCurrentSection]);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-6">
+    <section
+      ref={sectionRef}
+      className="relative min-h-screen flex items-center justify-center px-6"
+    >
       <div ref={contentRef} className="max-w-4xl text-center relative z-10">
         {/* Eyebrow */}
         <p
           ref={eyebrowRef}
           className="text-sm font-semibold tracking-[0.2em] uppercase mb-6"
           style={{
-            color: "#D4940F", // Darker, more saturated spark
+            color: "#D4940F",
             fontFamily: "Inter, sans-serif",
-            opacity: 1,
-            textShadow: "0 1px 2px rgba(255,255,255,0.8)", // Subtle lift from background
+            opacity: 0,
           }}
         >
           Creative Branding Agency
@@ -115,10 +184,9 @@ export function Hero() {
           ref={headlineRef}
           className="text-5xl md:text-7xl lg:text-8xl leading-[0.95] mb-8"
           style={{
-            color: "#0F0F0F", // Darker than var(--color-ink)
-            fontFamily: "Tenor Sans",
-            opacity: 1,
-            textShadow: "0 2px 4px rgba(255,255,255,0.5)", // Lift from background
+            color: "#0F0F0F",
+            fontFamily: "Tenor Sans, Georgia, serif",
+            opacity: 0,
           }}
         >
           We make brands
@@ -131,7 +199,7 @@ export function Hero() {
           ref={subheadlineRef}
           className="text-lg md:text-xl max-w-2xl mx-auto mb-12"
           style={{
-            color: "#3A3A3A", // Darker than var(--color-ink-light)
+            color: "#3A3A3A",
             lineHeight: 1.7,
             opacity: 0,
           }}
@@ -163,7 +231,7 @@ export function Hero() {
               borderColor: "#0F0F0F",
               color: "#0F0F0F",
               fontFamily: "Inter, sans-serif",
-              backgroundColor: "rgba(250, 247, 242, 0.8)", // Slight background for contrast
+              backgroundColor: "rgba(250, 247, 242, 0.8)",
             }}
             data-spark-hover
           >
@@ -188,12 +256,10 @@ export function Hero() {
           Scroll
         </span>
         <div className="relative w-px h-10">
-          {/* Track */}
           <div
             className="absolute inset-0 rounded-full"
             style={{ backgroundColor: "rgba(0,0,0,0.1)" }}
           />
-          {/* Animated bar */}
           <div
             className="absolute top-0 left-0 w-full rounded-full animate-scroll-pulse"
             style={{

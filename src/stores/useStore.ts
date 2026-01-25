@@ -17,24 +17,18 @@ interface AppState {
   isTouchDevice: boolean;
   setIsTouchDevice: (isTouch: boolean) => void;
 
-  // Loading & Animation States
+  // Loading
   loadingPhase:
     | "initial"
     | "spark-emerging"
     | "spark-born"
     | "content-revealing"
     | "complete";
-  isLoaded: boolean;
-  heroAnimationComplete: boolean;
-  setLoadingPhase: (phase: AppState["loadingPhase"]) => void;
-  setIsLoaded: (loaded: boolean) => void;
-  setHeroAnimationComplete: (complete: boolean) => void;
-
-  // Scene
   sceneReady: boolean;
+  setLoadingPhase: (phase: AppState["loadingPhase"]) => void;
   setSceneReady: (ready: boolean) => void;
 
-  // Sections
+  // Current Section
   currentSection:
     | "hero"
     | "work"
@@ -69,20 +63,13 @@ export const useStore = create<AppState>((set) => ({
   isTouchDevice: false,
   setIsTouchDevice: (isTouch) => set({ isTouchDevice: isTouch }),
 
-  // Loading & Animation States
+  // Loading
   loadingPhase: "initial",
-  isLoaded: false,
-  heroAnimationComplete: false,
-  setLoadingPhase: (phase) => set({ loadingPhase: phase }),
-  setIsLoaded: (loaded) => set({ isLoaded: loaded }),
-  setHeroAnimationComplete: (complete) =>
-    set({ heroAnimationComplete: complete }),
-
-  // Scene
   sceneReady: false,
+  setLoadingPhase: (phase) => set({ loadingPhase: phase }),
   setSceneReady: (ready) => set({ sceneReady: ready }),
 
-  // Sections
+  // Current Section
   currentSection: "hero",
   setCurrentSection: (section) => set({ currentSection: section }),
 
