@@ -57,7 +57,7 @@ export function Work() {
     // Header fade in
     gsap.fromTo(
       header,
-      { opacity: 0, y: 40 },
+      { opacity: 100, y: 40 },
       {
         opacity: 1,
         y: 0,
@@ -134,7 +134,7 @@ export function Work() {
         <div
           ref={headerRef}
           className="absolute top-12 md:top-16 left-6 md:left-12 z-10"
-          style={{ opacity: 0 }}
+          style={{ opacity: 100 }}
         >
           <p
             className="text-sm font-medium tracking-[0.2em] uppercase mb-2"

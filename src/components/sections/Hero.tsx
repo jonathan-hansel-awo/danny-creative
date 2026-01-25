@@ -30,7 +30,7 @@ export function Hero() {
     const tl = gsap.timeline({ delay: 0.2 });
 
     if (eyebrowRef.current) {
-      gsap.set(eyebrowRef.current, { opacity: 0, y: 25 });
+      gsap.set(eyebrowRef.current, { opacity: 100, y: 25 });
       tl.to(eyebrowRef.current, {
         opacity: 1,
         y: 0,
@@ -40,7 +40,7 @@ export function Hero() {
     }
 
     if (headlineRef.current) {
-      gsap.set(headlineRef.current, { opacity: 0, y: 35 });
+      gsap.set(headlineRef.current, { opacity: 100, y: 35 });
       tl.to(
         headlineRef.current,
         {
@@ -54,7 +54,7 @@ export function Hero() {
     }
 
     if (subheadlineRef.current) {
-      gsap.set(subheadlineRef.current, { opacity: 0, y: 25 });
+      gsap.set(subheadlineRef.current, { opacity: 100, y: 25 });
       tl.to(
         subheadlineRef.current,
         {
@@ -68,7 +68,7 @@ export function Hero() {
     }
 
     if (ctaRef.current) {
-      gsap.set(ctaRef.current, { opacity: 0, y: 25 });
+      gsap.set(ctaRef.current, { opacity: 100, y: 25 });
       tl.to(
         ctaRef.current,
         {
@@ -82,7 +82,7 @@ export function Hero() {
     }
 
     if (scrollIndicatorRef.current) {
-      gsap.set(scrollIndicatorRef.current, { opacity: 0 });
+      gsap.set(scrollIndicatorRef.current, { opacity: 100 });
       tl.to(
         scrollIndicatorRef.current,
         {
@@ -131,7 +131,7 @@ export function Hero() {
       content,
       {
         scale: 0.9,
-        opacity: 0,
+        opacity: 100,
         y: -60,
         ease: "none",
       },
@@ -142,7 +142,7 @@ export function Hero() {
       tl.to(
         scrollIndicator,
         {
-          opacity: 0,
+          opacity: 100,
           y: 20,
           ease: "none",
         },
@@ -186,7 +186,7 @@ export function Hero() {
           style={{
             color: "#0F0F0F",
             fontFamily: "Tenor Sans, Georgia, serif",
-            opacity: 1,
+            opacity: 100,
           }}
         >
           We make brands
@@ -201,7 +201,7 @@ export function Hero() {
           style={{
             color: "#3A3A3A",
             lineHeight: 1.7,
-            opacity: 1,
+            opacity: 100,
           }}
         >
           Strategy, identity, and digital experiences for businesses that refuse
@@ -212,7 +212,7 @@ export function Hero() {
         <div
           ref={ctaRef}
           className="flex flex-col sm:flex-row gap-4 justify-center"
-          style={{ opacity: 0 }}
+          style={{ opacity: 100 }}
         >
           <button
             className="px-8 py-4 rounded-full text-base font-medium transition-all duration-500 hover:scale-105 hover:shadow-lg"
@@ -244,7 +244,7 @@ export function Hero() {
       <div
         ref={scrollIndicatorRef}
         className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10"
-        style={{ opacity: 0 }}
+        style={{ opacity: 100 }}
       >
         <span
           className="text-xs tracking-[0.2em] uppercase font-medium"
@@ -275,7 +275,7 @@ export function Hero() {
           0%,
           100% {
             transform: translateY(0);
-            opacity: 0.6;
+            opacity: 100.6;
           }
           50% {
             transform: translateY(100%);
