@@ -186,7 +186,7 @@ export function Hero() {
           style={{
             color: "#0F0F0F",
             fontFamily: "Tenor Sans, Georgia, serif",
-            opacity: 0,
+            opacity: 1,
           }}
         >
           We make brands
@@ -201,7 +201,7 @@ export function Hero() {
           style={{
             color: "#3A3A3A",
             lineHeight: 1.7,
-            opacity: 0,
+            opacity: 1,
           }}
         >
           Strategy, identity, and digital experiences for businesses that refuse
