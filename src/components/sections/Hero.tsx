@@ -173,7 +173,7 @@ export function Hero() {
           style={{
             color: "#D4940F",
             fontFamily: "Inter, sans-serif",
-            opacity: 0,
+            opacity: 1,
           }}
         >
           Creative Branding Agency
