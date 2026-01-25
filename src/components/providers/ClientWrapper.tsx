@@ -6,6 +6,7 @@ import { SmoothScrollProvider } from "./SmoothScrollProvider";
 import { Spark } from "@/components/spark/Spark";
 import { AmbientSparks } from "@/components/spark/AmbientSparks";
 import { Loader } from "@/components/loader/Loader";
+import { Navigation } from "@/components/layout/Navigation";
 import { useDeviceDetection } from "@/hooks/useDeviceDetection";
 import { useStore } from "@/stores/useStore";
 
@@ -14,7 +15,6 @@ const Scene = dynamic(
   { ssr: false },
 );
 
-// Helper to check if we're on the client
 function useIsClient() {
   return useSyncExternalStore(
     () => () => {},
@@ -29,7 +29,6 @@ export function ClientWrapper({ children }: { children: ReactNode }) {
 
   useDeviceDetection();
 
-  // Server render or initial hydration
   if (!isClient) {
     return <div className="fixed inset-0 z-[9999] bg-[#1A1A1A]" />;
   }
@@ -41,6 +40,7 @@ export function ClientWrapper({ children }: { children: ReactNode }) {
     <>
       <Loader />
       <Scene />
+      <Navigation />
       <Spark />
       <AmbientSparks />
       <SmoothScrollProvider>
