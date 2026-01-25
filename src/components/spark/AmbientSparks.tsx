@@ -61,7 +61,7 @@ export function AmbientSparks() {
       sparksRef.current.forEach((spark) => {
         // Update position
         spark.x += spark.vx;
-        spark.y += spark.vy - scrollVelocity * 0.2;
+        spark.y += spark.vy - scrollVelocity * 0.01;
 
         // Bounce
         if (spark.x < 40 || spark.x > canvas.width - 40) spark.vx *= -1;
