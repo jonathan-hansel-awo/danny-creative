@@ -38,11 +38,11 @@ export function AmbientSparks() {
       canvas.height = window.innerHeight;
 
       // Create sparks
-      sparksRef.current = Array.from({ length: 0}, () => ({
+      sparksRef.current = Array.from({ length: 1}, () => ({
         x: canvas.width * 0.2 + Math.random() * canvas.width * 0.6,
         y: canvas.height * 0.2 + Math.random() * canvas.height * 0.6,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
+        vx: (Math.random() - 0.5) * 0.1,
+        vy: (Math.random() - 0.5) * 0.1,
         size: 5 + Math.random() * 4,
         opacity: 0.5 + Math.random() * 0.3,
         phase: Math.random() * Math.PI * 2,
