@@ -223,7 +223,7 @@ export function Footer() {
                 >
                   123 Creative Street<br />
                   Design District<br />
-                  New York, NY 10001
+                  Yenagoa, Bayelsa State
                 </address>
               </li>
             </ul>
