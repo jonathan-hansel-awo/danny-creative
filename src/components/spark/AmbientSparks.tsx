@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useStore } from '@/stores/useStore';
-import { useReducedMotion } from '@/components/ui/ReducedMotion';
 
 interface AmbientSpark {
   x: number;
@@ -20,11 +19,26 @@ export function AmbientSparks() {
   const frameRef = useRef<number | null>(null);
   const scrollVelocityRef = useRef(0);
 
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
   const isTouchDevice = useStore((s) => s.isTouchDevice);
   const loadingPhase = useStore((s) => s.loadingPhase);
   const scrollVelocity = useStore((s) => s.scrollVelocity);
 
-  const { prefersReducedMotion } = useReducedMotion();
+  // Check for reduced motion preference
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      setPrefersReducedMotion(e.matches);
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
 
   // Update scroll velocity ref (to avoid stale closure)
   useEffect(() => {
@@ -78,8 +92,6 @@ export function AmbientSparks() {
         spark.y += spark.vy;
 
         // Move in the direction of scroll (opposite to scroll direction for parallax feel)
-        // When scrolling down (positive velocity), sparks move up
-        // This creates a nice parallax effect
         const scrollInfluence = currentScrollVelocity * 0.15;
         spark.y -= scrollInfluence;
 
@@ -87,7 +99,7 @@ export function AmbientSparks() {
         spark.vx += (Math.random() - 0.5) * 0.02;
         spark.vy += (Math.random() - 0.5) * 0.02;
 
-        // Dampen velocity to prevent runaway movement
+        // Dampen velocity
         spark.vx *= 0.98;
         spark.vy *= 0.98;
 
@@ -96,7 +108,7 @@ export function AmbientSparks() {
         spark.vx = Math.max(-maxVelocity, Math.min(maxVelocity, spark.vx));
         spark.vy = Math.max(-maxVelocity, Math.min(maxVelocity, spark.vy));
 
-        // Soft boundary wrapping (sparks wrap around instead of bouncing)
+        // Soft boundary wrapping
         const padding = 50;
         if (spark.x < -padding) spark.x = canvas.width + padding;
         if (spark.x > canvas.width + padding) spark.x = -padding;
