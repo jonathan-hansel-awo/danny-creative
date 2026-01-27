@@ -141,6 +141,7 @@ export function About() {
   return (
     <section
       ref={sectionRef}
+        id="about"
       className="relative py-32 md:py-40 lg:py-52"
       style={{ backgroundColor: "var(--color-cream)" }}
     >

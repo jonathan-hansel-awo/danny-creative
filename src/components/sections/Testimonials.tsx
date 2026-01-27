@@ -116,7 +116,8 @@ export function Testimonials() {
 
   return (
     <section
-      ref={sectionRef}
+  ref={sectionRef}
+  id="testimonials"
       className="relative py-24 md:py-32 lg:py-40"
       style={{ backgroundColor: "var(--color-cream-dark)" }}
     >

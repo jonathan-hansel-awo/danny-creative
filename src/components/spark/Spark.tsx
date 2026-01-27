@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useStore } from "@/stores/useStore";
+import { useReducedMotion } from "@/components/ui/ReducedMotion";
 
 interface Particle {
   x: number;
@@ -25,9 +26,13 @@ export function Spark() {
   const loadingPhase = useStore((s) => s.loadingPhase);
   const setCursorPosition = useStore((s) => s.setCursorPosition);
 
+  const { prefersReducedMotion } = useReducedMotion();
+
   useEffect(() => {
-    // Don't render on touch devices or during loading
-    if (isTouchDevice || loadingPhase !== "complete") return;
+    // Don't render on touch devices, during loading, or if reduced motion is preferred
+    if (isTouchDevice || loadingPhase !== "complete" || prefersReducedMotion) {
+      return;
+    }
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -35,18 +40,15 @@ export function Spark() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Resize handler
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     };
     resize();
 
-    // Initialize position to center
     sparkPos.current = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     targetPos.current = { ...sparkPos.current };
 
-    // Mouse move handler
     const handleMouseMove = (e: MouseEvent) => {
       const now = performance.now();
       const dt = now - lastMouse.current.time;
@@ -61,7 +63,6 @@ export function Spark() {
       lastMouse.current = { x: e.clientX, y: e.clientY, time: now };
       targetPos.current = { x: e.clientX, y: e.clientY };
 
-      // Spawn trail particle if moving fast
       const speed = Math.sqrt(
         velocity.current.x ** 2 + velocity.current.y ** 2,
       );
@@ -76,7 +77,6 @@ export function Spark() {
       }
     };
 
-    // Hover detection
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       isHovering.current = !!(
@@ -86,20 +86,16 @@ export function Spark() {
       );
     };
 
-    // Animation loop
     const animate = () => {
       if (!ctx || !canvas) return;
 
       const now = performance.now();
 
-      // Lerp position (smooth follow)
       sparkPos.current.x += (targetPos.current.x - sparkPos.current.x) * 0.08;
       sparkPos.current.y += (targetPos.current.y - sparkPos.current.y) * 0.08;
 
-      // Update store
       setCursorPosition({ ...sparkPos.current });
 
-      // Clear
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Draw trail particles
@@ -130,7 +126,6 @@ export function Spark() {
         return true;
       });
 
-      // Calculate spark size
       const speed = Math.sqrt(
         velocity.current.x ** 2 + velocity.current.y ** 2,
       );
@@ -141,11 +136,10 @@ export function Spark() {
         size = 14 + Math.min(speed * 0.5, 6);
       }
 
-      // Breathing animation
       const breathe = Math.sin(now / 1500) * 0.06 + 1;
       size *= breathe;
 
-      // Draw outer glow
+      // Outer glow
       const outerGlow = ctx.createRadialGradient(
         sparkPos.current.x,
         sparkPos.current.y,
@@ -169,7 +163,7 @@ export function Spark() {
       ctx.fillStyle = outerGlow;
       ctx.fill();
 
-      // Draw inner spark
+      // Inner spark
       const innerGlow = ctx.createRadialGradient(
         sparkPos.current.x,
         sparkPos.current.y,
@@ -187,7 +181,7 @@ export function Spark() {
       ctx.fillStyle = innerGlow;
       ctx.fill();
 
-      // Draw core
+      // Core
       ctx.beginPath();
       ctx.arc(
         sparkPos.current.x,
@@ -199,20 +193,17 @@ export function Spark() {
       ctx.fillStyle = "#FFFDF8";
       ctx.fill();
 
-      // Decay velocity
       velocity.current.x *= 0.92;
       velocity.current.y *= 0.92;
 
       frameRef.current = requestAnimationFrame(animate);
     };
 
-    // Add event listeners
     document.body.classList.add("has-spark");
     window.addEventListener("resize", resize);
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseover", handleMouseOver);
 
-    // Start animation
     frameRef.current = requestAnimationFrame(animate);
 
     return () => {
@@ -224,10 +215,9 @@ export function Spark() {
         cancelAnimationFrame(frameRef.current);
       }
     };
-  }, [isTouchDevice, loadingPhase, setCursorPosition]);
+  }, [isTouchDevice, loadingPhase, prefersReducedMotion, setCursorPosition]);
 
-  // Don't render on touch or during loading
-  if (isTouchDevice || loadingPhase !== "complete") {
+  if (isTouchDevice || loadingPhase !== "complete" || prefersReducedMotion) {
     return null;
   }
 

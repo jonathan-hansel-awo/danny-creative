@@ -9,12 +9,20 @@
   --color-ink-muted: #8A8A8A;
   --color-spark: #E8A54B;
   --color-spark-light: #F5D49B;
+
+  --font-tenor: 'Tenor Sans', Georgia, serif;
+  --font-inter: 'Inter', system-ui, sans-serif;
 }
+
+/* ========================================
+   BASE STYLES
+   ======================================== */
 
 html {
   background-color: var(--color-cream);
   scrollbar-width: none;
   -ms-overflow-style: none;
+  scroll-behavior: smooth;
 }
 
 html::-webkit-scrollbar {
@@ -22,10 +30,12 @@ html::-webkit-scrollbar {
 }
 
 body {
-  font-family: 'Tenor Sans', Georgia, serif;
+  font-family: var(--font-tenor);
   color: var(--color-ink-light);
   background-color: var(--color-cream);
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection {
@@ -33,28 +43,59 @@ body {
   color: var(--color-warm-white);
 }
 
+/* ========================================
+   FOCUS STYLES (Accessibility)
+   ======================================== */
+
+:focus {
+  outline: none;
+}
+
 :focus-visible {
   outline: 2px solid var(--color-spark);
   outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Skip link */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only:focus,
+.sr-only:focus-visible {
+  position: absolute;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
 }
 
 /* ========================================
-   LAYERING - Critical for depth
+   LAYERING
    ======================================== */
 
-/* Three.js canvas - background layer */
 .three-canvas,
 .fixed canvas {
   z-index: 0 !important;
 }
 
-/* Content sits above 3D */
 .content-layer {
   position: relative;
   z-index: 10;
 }
 
-/* Spark cursor on top */
 .spark-cursor {
   pointer-events: none;
   position: fixed;
@@ -69,8 +110,61 @@ body {
 
 .has-spark a,
 .has-spark button,
-.has-spark [role="button"] {
+.has-spark [role="button"],
+.has-spark input,
+.has-spark textarea,
+.has-spark select {
   cursor: none;
+}
+
+/* ========================================
+   ANIMATION UTILITIES
+   ======================================== */
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* ========================================
@@ -82,59 +176,143 @@ body {
   *,
   *::before,
   *::after {
-    animation-duration: 10ms !important;
-    transition-duration: 10ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .spark-cursor,
+  .ambient-sparks {
+    display: none !important;
   }
 }
 
 /* ========================================
-   HERO ANIMATION STYLES
+   PERFORMANCE OPTIMIZATIONS
    ======================================== */
 
-.hero-word {
-  display: inline-block;
-  will-change: transform, opacity;
-}
-
-/* Ensure smooth transitions on buttons */
-button {
-  will-change: transform, background-color;
-}
-
-/* Loading screen base */
-.loading-screen {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background-color: #1A1A1A;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ========================================
-   WORK SECTION STYLES
-   ======================================== */
-
-.work-gallery {
+.will-change-transform {
   will-change: transform;
 }
 
-.project-card {
-  will-change: transform, opacity;
+.will-change-opacity {
+  will-change: opacity;
 }
 
-/* Smooth image reveal */
-.image-reveal {
-  clip-path: inset(100% 0% 0% 0%);
-  transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
-.image-reveal.revealed {
-  clip-path: inset(0% 0% 0% 0%);
+/* Contain paint for sections */
+section {
+  contain: layout style;
 }
 
-/* Progress bar glow effect */
-.progress-bar {
-  box-shadow: 0 0 10px var(--color-spark-glow);
+/* ========================================
+   TYPOGRAPHY UTILITIES
+   ======================================== */
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-pretty {
+  text-wrap: pretty;
+}
+
+/* Line clamp */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ========================================
+   BUTTON STYLES
+   ======================================== */
+
+button,
+[role="button"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ========================================
+   IMAGE OPTIMIZATION
+   ======================================== */
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ========================================
+   SCROLLBAR (for browsers that show it)
+   ======================================== */
+
+@supports not (scrollbar-width: none) {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-cream-dark);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ink-muted);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-ink-light);
+  }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+
+@media print {
+
+  .spark-cursor,
+  .ambient-sparks,
+  .three-canvas,
+  nav,
+  .back-to-top {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+  }
 }

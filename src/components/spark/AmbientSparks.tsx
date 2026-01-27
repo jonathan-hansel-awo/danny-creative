@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { useStore } from '@/stores/useStore';
+import { useEffect, useRef } from "react";
+import { useStore } from "@/stores/useStore";
+import { useReducedMotion } from "@/components/ui/ReducedMotion";
 
 interface AmbientSpark {
   x: number;
@@ -19,26 +20,11 @@ export function AmbientSparks() {
   const frameRef = useRef<number | null>(null);
   const scrollVelocityRef = useRef(0);
 
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
   const isTouchDevice = useStore((s) => s.isTouchDevice);
   const loadingPhase = useStore((s) => s.loadingPhase);
   const scrollVelocity = useStore((s) => s.scrollVelocity);
 
-  // Check for reduced motion preference
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mediaQuery.matches);
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches);
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
+  const { prefersReducedMotion } = useReducedMotion();
 
   // Update scroll velocity ref (to avoid stale closure)
   useEffect(() => {
@@ -47,14 +33,14 @@ export function AmbientSparks() {
 
   useEffect(() => {
     // Only show on touch devices after loading
-    if (!isTouchDevice || loadingPhase !== 'complete' || prefersReducedMotion) {
+    if (!isTouchDevice || loadingPhase !== "complete" || prefersReducedMotion) {
       return;
     }
 
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     // Initialize
@@ -74,7 +60,7 @@ export function AmbientSparks() {
       }));
     };
     resize();
-    window.addEventListener('resize', resize);
+    window.addEventListener("resize", resize);
 
     // Animation
     const animate = () => {
@@ -92,6 +78,8 @@ export function AmbientSparks() {
         spark.y += spark.vy;
 
         // Move in the direction of scroll (opposite to scroll direction for parallax feel)
+        // When scrolling down (positive velocity), sparks move up
+        // This creates a nice parallax effect
         const scrollInfluence = currentScrollVelocity * 0.15;
         spark.y -= scrollInfluence;
 
@@ -99,7 +87,7 @@ export function AmbientSparks() {
         spark.vx += (Math.random() - 0.5) * 0.02;
         spark.vy += (Math.random() - 0.5) * 0.02;
 
-        // Dampen velocity
+        // Dampen velocity to prevent runaway movement
         spark.vx *= 0.98;
         spark.vy *= 0.98;
 
@@ -108,7 +96,7 @@ export function AmbientSparks() {
         spark.vx = Math.max(-maxVelocity, Math.min(maxVelocity, spark.vx));
         spark.vy = Math.max(-maxVelocity, Math.min(maxVelocity, spark.vy));
 
-        // Soft boundary wrapping
+        // Soft boundary wrapping (sparks wrap around instead of bouncing)
         const padding = 50;
         if (spark.x < -padding) spark.x = canvas.width + padding;
         if (spark.x > canvas.width + padding) spark.x = -padding;
@@ -126,11 +114,11 @@ export function AmbientSparks() {
           0,
           spark.x,
           spark.y,
-          size * 3
+          size * 3,
         );
         glow.addColorStop(0, `rgba(232, 165, 75, ${spark.opacity * 0.4})`);
         glow.addColorStop(0.5, `rgba(232, 165, 75, ${spark.opacity * 0.15})`);
-        glow.addColorStop(1, 'rgba(232, 165, 75, 0)');
+        glow.addColorStop(1, "rgba(232, 165, 75, 0)");
 
         ctx.beginPath();
         ctx.arc(spark.x, spark.y, size * 3, 0, Math.PI * 2);
@@ -144,7 +132,7 @@ export function AmbientSparks() {
           0,
           spark.x,
           spark.y,
-          size
+          size,
         );
         core.addColorStop(0, `rgba(255, 253, 248, ${spark.opacity})`);
         core.addColorStop(0.4, `rgba(232, 165, 75, ${spark.opacity})`);
@@ -162,14 +150,14 @@ export function AmbientSparks() {
     frameRef.current = requestAnimationFrame(animate);
 
     return () => {
-      window.removeEventListener('resize', resize);
+      window.removeEventListener("resize", resize);
       if (frameRef.current) {
         cancelAnimationFrame(frameRef.current);
       }
     };
   }, [isTouchDevice, loadingPhase, prefersReducedMotion]);
 
-  if (!isTouchDevice || loadingPhase !== 'complete' || prefersReducedMotion) {
+  if (!isTouchDevice || loadingPhase !== "complete" || prefersReducedMotion) {
     return null;
   }
 

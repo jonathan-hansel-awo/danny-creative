@@ -95,8 +95,9 @@ export function Contact() {
   return (
     <section
       ref={sectionRef}
+      id="contact"
       className="relative py-32 md:py-40 lg:py-52 overflow-hidden"
-      style={{ backgroundColor: 'var(--color-cream)' }}
+      style={{ backgroundColor: "var(--color-cream)" }}
     >
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -104,13 +105,15 @@ export function Contact() {
         <div
           className="absolute -top-1/2 -right-1/4 w-[800px] h-[800px] rounded-full opacity-30"
           style={{
-            background: 'radial-gradient(circle, rgba(212,148,15,0.15) 0%, transparent 70%)',
+            background:
+              "radial-gradient(circle, rgba(212,148,15,0.15) 0%, transparent 70%)",
           }}
         />
         <div
           className="absolute -bottom-1/2 -left-1/4 w-[600px] h-[600px] rounded-full opacity-20"
           style={{
-            background: 'radial-gradient(circle, rgba(212,148,15,0.1) 0%, transparent 70%)',
+            background:
+              "radial-gradient(circle, rgba(212,148,15,0.1) 0%, transparent 70%)",
           }}
         />
       </div>
@@ -122,17 +125,19 @@ export function Contact() {
             ref={sparkRef}
             className="mx-auto mb-12 w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center"
             style={{
-              background: 'radial-gradient(circle, #F5D49B 0%, #D4940F 50%, #B8820D 100%)',
-              boxShadow: '0 0 60px rgba(212,148,15,0.5), 0 0 120px rgba(212,148,15,0.3)',
+              background:
+                "radial-gradient(circle, #F5D49B 0%, #D4940F 50%, #B8820D 100%)",
+              boxShadow:
+                "0 0 60px rgba(212,148,15,0.5), 0 0 120px rgba(212,148,15,0.3)",
               opacity: 0,
-              transform: 'scale(0)',
+              transform: "scale(0)",
             }}
           >
             {/* Inner glow */}
             <div
               className="w-8 h-8 md:w-10 md:h-10 rounded-full"
               style={{
-                background: 'radial-gradient(circle, #FFF9F0 0%, #F5D49B 100%)',
+                background: "radial-gradient(circle, #FFF9F0 0%, #F5D49B 100%)",
               }}
             />
           </div>
@@ -140,7 +145,7 @@ export function Contact() {
           {/* Eyebrow */}
           <p
             className="animate-in text-sm font-medium tracking-[0.2em] uppercase mb-6"
-            style={{ color: '#D4940F', opacity: 0 }}
+            style={{ color: "#D4940F", opacity: 0 }}
           >
             Let&apos;s Connect
           </p>
@@ -149,21 +154,22 @@ export function Contact() {
           <h2
             className="animate-in text-4xl md:text-5xl lg:text-6xl mb-6"
             style={{
-              color: '#0F0F0F',
-              fontFamily: 'Tenor Sans, Georgia, serif',
+              color: "#0F0F0F",
+              fontFamily: "Tenor Sans, Georgia, serif",
               opacity: 0,
             }}
           >
-            Ready to create something<br className="hidden md:block" /> amazing?
+            Ready to create something
+            <br className="hidden md:block" /> amazing?
           </h2>
 
           {/* Subheadline */}
           <p
             className="animate-in text-lg md:text-xl mb-12 max-w-xl mx-auto"
-            style={{ color: '#4A4A4A', lineHeight: 1.7, opacity: 0 }}
+            style={{ color: "#4A4A4A", lineHeight: 1.7, opacity: 0 }}
           >
-            Every great brand starts with a conversation. Tell us about your vision, 
-            and let&apos;s bring it to life together.
+            Every great brand starts with a conversation. Tell us about your
+            vision, and let&apos;s bring it to life together.
           </p>
 
           {/* CTA Buttons */}
@@ -174,9 +180,9 @@ export function Contact() {
             <button
               className="group relative px-10 py-5 rounded-full text-lg font-medium overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl"
               style={{
-                backgroundColor: '#D4940F',
-                color: 'white',
-                fontFamily: 'Inter, sans-serif',
+                backgroundColor: "#D4940F",
+                color: "white",
+                fontFamily: "Inter, sans-serif",
               }}
               data-spark-hover
             >
@@ -184,7 +190,8 @@ export function Contact() {
               <div
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                 style={{
-                  background: 'linear-gradient(135deg, #E8A54B 0%, #D4940F 100%)',
+                  background:
+                    "linear-gradient(135deg, #E8A54B 0%, #D4940F 100%)",
                 }}
               />
             </button>
@@ -192,10 +199,10 @@ export function Contact() {
             <button
               className="px-10 py-5 rounded-full text-lg font-medium border-2 transition-all duration-500 hover:border-[#D4940F] hover:text-[#D4940F]"
               style={{
-                borderColor: '#0F0F0F',
-                color: '#0F0F0F',
-                fontFamily: 'Inter, sans-serif',
-                backgroundColor: 'transparent',
+                borderColor: "#0F0F0F",
+                color: "#0F0F0F",
+                fontFamily: "Inter, sans-serif",
+                backgroundColor: "transparent",
               }}
               data-spark-hover
             >
@@ -205,13 +212,13 @@ export function Contact() {
 
           {/* Alternative contact */}
           <div className="animate-in" style={{ opacity: 0 }}>
-            <p className="text-sm mb-3" style={{ color: '#8A8A8A' }}>
+            <p className="text-sm mb-3" style={{ color: "#8A8A8A" }}>
               Prefer email?
             </p>
             <a
               href="mailto:hello@dannycreative.com"
               className="text-lg font-medium transition-colors duration-300 hover:text-[#D4940F]"
-              style={{ color: '#0F0F0F' }}
+              style={{ color: "#0F0F0F" }}
               data-spark-hover
             >
               hello@dannycreative.com

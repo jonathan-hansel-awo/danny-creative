@@ -1,6 +1,6 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
-interface AppState {
+interface StoreState {
   // Scroll
   scrollProgress: number;
   scrollVelocity: number;
@@ -9,43 +9,32 @@ interface AppState {
 
   // Cursor
   cursorPosition: { x: number; y: number };
-  isHoveringInteractive: boolean;
-  setCursorPosition: (pos: { x: number; y: number }) => void;
-  setIsHoveringInteractive: (hovering: boolean) => void;
+  setCursorPosition: (position: { x: number; y: number }) => void;
 
   // Device
   isTouchDevice: boolean;
   setIsTouchDevice: (isTouch: boolean) => void;
 
   // Loading
-  loadingPhase:
-    | "initial"
-    | "spark-emerging"
-    | "spark-born"
-    | "content-revealing"
-    | "complete";
+  loadingPhase: 'initial' | 'spark-emerging' | 'spark-born' | 'content-revealing' | 'complete';
+  setLoadingPhase: (phase: StoreState['loadingPhase']) => void;
+
+  // Scene
   sceneReady: boolean;
-  setLoadingPhase: (phase: AppState["loadingPhase"]) => void;
   setSceneReady: (ready: boolean) => void;
 
-  // Current Section
-  currentSection:
-    | "hero"
-    | "work"
-    | "services"
-    | "about"
-    | "testimonials"
-    | "contact";
-  setCurrentSection: (section: AppState["currentSection"]) => void;
+  // Sections
+  currentSection: 'hero' | 'work' | 'services' | 'about' | 'team' | 'testimonials' | 'contact';
+  setCurrentSection: (section: StoreState['currentSection']) => void;
 
-  // Work Section
+  // Work section
   activeProjectIndex: number;
-  workProgress: number;
   setActiveProjectIndex: (index: number) => void;
+  workProgress: number;
   setWorkProgress: (progress: number) => void;
 }
 
-export const useStore = create<AppState>((set) => ({
+export const useStore = create<StoreState>((set) => ({
   // Scroll
   scrollProgress: 0,
   scrollVelocity: 0,
@@ -54,28 +43,27 @@ export const useStore = create<AppState>((set) => ({
 
   // Cursor
   cursorPosition: { x: 0, y: 0 },
-  isHoveringInteractive: false,
-  setCursorPosition: (pos) => set({ cursorPosition: pos }),
-  setIsHoveringInteractive: (hovering) =>
-    set({ isHoveringInteractive: hovering }),
+  setCursorPosition: (position) => set({ cursorPosition: position }),
 
   // Device
   isTouchDevice: false,
   setIsTouchDevice: (isTouch) => set({ isTouchDevice: isTouch }),
 
   // Loading
-  loadingPhase: "initial",
-  sceneReady: false,
+  loadingPhase: 'initial',
   setLoadingPhase: (phase) => set({ loadingPhase: phase }),
+
+  // Scene
+  sceneReady: false,
   setSceneReady: (ready) => set({ sceneReady: ready }),
 
-  // Current Section
-  currentSection: "hero",
+  // Sections
+  currentSection: 'hero',
   setCurrentSection: (section) => set({ currentSection: section }),
 
-  // Work Section
+  // Work section
   activeProjectIndex: 0,
-  workProgress: 0,
   setActiveProjectIndex: (index) => set({ activeProjectIndex: index }),
+  workProgress: 0,
   setWorkProgress: (progress) => set({ workProgress: progress }),
 }));

@@ -126,6 +126,7 @@ export function Work() {
   return (
     <section
       ref={sectionRef}
+      id="work"
       className="relative"
       style={{ backgroundColor: "var(--color-cream)" }}
     >

@@ -163,6 +163,7 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
+      id="hero"
       className="relative min-h-screen flex items-center justify-center px-6"
     >
       <div ref={contentRef} className="max-w-4xl text-center relative z-10">

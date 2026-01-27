@@ -65,7 +65,7 @@ function FloatingShape({
   }, [geometry]);
 
   return (
-    <Float speed={0.4} rotationIntensity={0.2} floatIntensity={0.8}>
+    <Float speed={0.6} rotationIntensity={0.5} floatIntensity={0.8}>
       <mesh ref={meshRef} position={position} scale={scale}>
         {geo}
         <meshStandardMaterial
