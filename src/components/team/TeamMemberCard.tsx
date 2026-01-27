@@ -56,10 +56,10 @@ export function TeamMemberCard({ member, index, isActive, totalMembers }: TeamMe
   return (
     <div
       ref={cardRef}
-      className="flex-shrink-0 w-[90vw] md:w-[85vw] lg:w-[80vw] h-full flex items-center justify-center px-4 md:px-8"
+      className="flex-shrink-0 w-[90vw] md:w-[85vw] lg:w-[80vw] mt-28 h-full flex items-center justify-center px-4 md:px-8"
     >
       <div
-        className="w-full max-w-6xl h-[80vh] md:h-[75vh] flex flex-col-reverse lg:flex-row gap-8 lg:gap-16 items-center transition-opacity duration-700"
+        className="w-full max-w-6xl h-[80vh] md:h-[75vh] pt-24 flex flex-col-reverse lg:flex-row gap-8 lg:gap-16 items-center transition-opacity duration-700"
         style={{ opacity: isActive ? 1 : 0.2 }}
       >
         {/* Content Side */}
@@ -77,11 +77,11 @@ export function TeamMemberCard({ member, index, isActive, totalMembers }: TeamMe
               style={{
                 color: member.color,
                 opacity: 0.15,
-                fontFamily: 'Tenor Sans, Georgia, serif',
+                fontFamily: "Tenor Sans, Georgia, serif",
                 lineHeight: 1,
               }}
             >
-              {String(index + 1).padStart(2, '0')}
+              {String(index + 1).padStart(2, "0")}
             </span>
           </div>
 
@@ -97,8 +97,8 @@ export function TeamMemberCard({ member, index, isActive, totalMembers }: TeamMe
           <h3
             className="animate-item text-4xl md:text-5xl lg:text-6xl mb-6"
             style={{
-              color: '#0F0F0F',
-              fontFamily: 'Tenor Sans, Georgia, serif',
+              color: "#0F0F0F",
+              fontFamily: "Tenor Sans, Georgia, serif",
               opacity: 0,
             }}
           >
@@ -108,7 +108,7 @@ export function TeamMemberCard({ member, index, isActive, totalMembers }: TeamMe
           {/* Bio */}
           <p
             className="animate-item text-base md:text-lg leading-relaxed mb-8 max-w-lg"
-            style={{ color: '#4A4A4A', opacity: 0 }}
+            style={{ color: "#4A4A4A", opacity: 0 }}
           >
             {member.bio}
           </p>
@@ -124,8 +124,8 @@ export function TeamMemberCard({ member, index, isActive, totalMembers }: TeamMe
             <p
               className="text-lg md:text-xl italic"
               style={{
-                color: '#0F0F0F',
-                fontFamily: 'Tenor Sans, Georgia, serif',
+                color: "#0F0F0F",
+                fontFamily: "Tenor Sans, Georgia, serif",
               }}
             >
               &quot;{member.quote}&quot;
@@ -142,7 +142,7 @@ export function TeamMemberCard({ member, index, isActive, totalMembers }: TeamMe
               className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110"
               style={{
                 backgroundColor: member.color,
-                color: 'white',
+                color: "white",
               }}
               data-spark-hover
               aria-label={`${member.name}'s LinkedIn`}
@@ -189,14 +189,12 @@ export function TeamMemberCard({ member, index, isActive, totalMembers }: TeamMe
         </div>
 
         {/* Image Side */}
-        <div
-          className="w-full lg:w-1/2 h-[40vh] lg:h-full flex items-center justify-center"
-        >
+        <div className="w-full lg:w-1/2 h-[40vh] lg:h-full flex items-center justify-center">
           <div
             ref={imageRef}
             className="relative w-full max-w-md lg:max-w-lg aspect-[3/4] rounded-2xl overflow-hidden"
             style={{
-              clipPath: 'inset(100% 0% 0% 0%)',
+              clipPath: "inset(100% 0% 0% 0%)",
             }}
           >
             {/* Placeholder gradient if no image */}
@@ -213,29 +211,29 @@ export function TeamMemberCard({ member, index, isActive, totalMembers }: TeamMe
                   <div
                     className="absolute w-32 h-32 rounded-full opacity-20"
                     style={{
-                      backgroundColor: 'white',
-                      top: '20%',
-                      right: '10%',
-                      filter: 'blur(40px)',
+                      backgroundColor: "white",
+                      top: "20%",
+                      right: "10%",
+                      filter: "blur(40px)",
                     }}
                   />
                   <div
                     className="absolute w-48 h-48 rounded-full opacity-15"
                     style={{
-                      backgroundColor: 'white',
-                      bottom: '15%',
-                      left: '5%',
-                      filter: 'blur(60px)',
+                      backgroundColor: "white",
+                      bottom: "15%",
+                      left: "5%",
+                      filter: "blur(60px)",
                     }}
                   />
-                  
+
                   {/* Placeholder icon */}
                   <div className="relative z-10 flex flex-col items-center">
                     <div
                       className="w-24 h-24 rounded-full flex items-center justify-center mb-4"
                       style={{
-                        backgroundColor: 'rgba(255,255,255,0.2)',
-                        backdropFilter: 'blur(10px)',
+                        backgroundColor: "rgba(255,255,255,0.2)",
+                        backdropFilter: "blur(10px)",
                       }}
                     >
                       <svg
@@ -254,7 +252,7 @@ export function TeamMemberCard({ member, index, isActive, totalMembers }: TeamMe
                     </div>
                     <span
                       className="text-sm font-medium tracking-wider uppercase"
-                      style={{ color: 'rgba(255,255,255,0.6)' }}
+                      style={{ color: "rgba(255,255,255,0.6)" }}
                     >
                       Photo coming soon
                     </span>
@@ -289,8 +287,8 @@ export function TeamMemberCard({ member, index, isActive, totalMembers }: TeamMe
             <div
               className="absolute bottom-6 left-6 right-6 p-4 rounded-xl"
               style={{
-                backgroundColor: 'rgba(255,255,255,0.95)',
-                backdropFilter: 'blur(10px)',
+                backgroundColor: "rgba(255,255,255,0.95)",
+                backdropFilter: "blur(10px)",
               }}
             >
               <p
@@ -302,8 +300,8 @@ export function TeamMemberCard({ member, index, isActive, totalMembers }: TeamMe
               <p
                 className="text-lg font-medium"
                 style={{
-                  color: '#0F0F0F',
-                  fontFamily: 'Tenor Sans, Georgia, serif',
+                  color: "#0F0F0F",
+                  fontFamily: "Tenor Sans, Georgia, serif",
                 }}
               >
                 {member.name}

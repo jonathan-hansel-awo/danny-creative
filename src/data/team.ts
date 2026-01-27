@@ -17,6 +17,7 @@ export const team: TeamMember[] = [
     bio: "With over a decade of experience in branding and design, Danny founded Danny Creative with a simple mission: help businesses become unforgettable. His approach combines strategic thinking with bold creativity.",
     quote:
       "Great brands aren't built—they're discovered. Our job is to find the spark that was always there.",
+    image: '/images/team/danny.jpg',
     color: "#D4940F",
     accentColor: "#F5D49B",
   },
