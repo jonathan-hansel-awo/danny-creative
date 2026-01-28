@@ -58,7 +58,7 @@ export function TeamMemberCard({ member, index, isActive, totalMembers }: TeamMe
       style={{ padding: '0 60px' }}
     >
       <div
-        className="h-[75vh] flex flex-row gap-12 items-center transition-opacity duration-700"
+        className="h-[75vh] flex flex-row gap-12 mt-24 items-center transition-opacity duration-700"
         style={{ opacity: isActive ? 1 : 0.25 }}
       >
         {/* Image Side - Fixed width */}

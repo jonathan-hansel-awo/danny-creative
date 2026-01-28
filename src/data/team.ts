@@ -23,7 +23,7 @@ export const team: TeamMember[] = [
   },
   {
     id: "martha",
-    name: "Martha Sink",
+    name: "Martha Smith",
     role: "Design Lead",
     bio: "Martha brings 8 years of visual design expertise to the team. Her keen eye for detail and passion for typography has shaped some of our most iconic brand identities.",
     quote:
@@ -32,13 +32,23 @@ export const team: TeamMember[] = [
     accentColor: "#8BB8BA",
   },
   {
+    id: "phoebe",
+    name: "Phoebe Lane",
+    role: "Design Lead",
+    bio: "Phoebe brings a unique blend of artistic vision and meticulous attention to detail to every project. With a background in fine arts and digital design, she transforms brand concepts into stunning visual identities.",
+    quote:
+      "Design is storytelling without words. Every color, every line, every space has something to say.",
+    color: "#D4940F",
+    accentColor: "#F5D49B",
+  },
+  {
     id: "ephraim",
-    name: "Ephraim Link",
+    name: "Ephraim Lincoln",
     role: "Strategy Director",
     bio: "Ephraim combines analytical thinking with creative intuition. He helps brands find their position in the market and develop strategies that drive real results.",
     quote:
       "Strategy without creativity is boring. Creativity without strategy is chaos.",
-    color: "#7D6B8F",
-    accentColor: "#B8A9C4",
+    color: "#7B8D6E",
+    accentColor: "#B5C4A8",
   },
 ];

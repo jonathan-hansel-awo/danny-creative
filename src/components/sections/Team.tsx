@@ -11,7 +11,7 @@ export function Team() {
   const headerRef = useRef<HTMLDivElement>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
   const galleryInnerRef = useRef<HTMLDivElement>(null);
-  const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
+  const scrollTweenRef = useRef<gsap.core.Tween | null>(null);
   const hasInitializedRef = useRef(false);
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -24,7 +24,6 @@ export function Team() {
     if (!galleryInnerRef.current) return 0;
     const contentWidth = galleryInnerRef.current.scrollWidth;
     const viewportWidth = window.innerWidth;
-    // Return the amount we need to scroll (content that extends beyond viewport)
     return Math.max(0, contentWidth - viewportWidth);
   }, []);
 
@@ -59,27 +58,22 @@ export function Team() {
       },
     );
 
-    // Setup horizontal scroll
-    const setupScrollTrigger = () => {
-      // Kill existing ScrollTrigger if it exists
-      if (scrollTriggerRef.current) {
-        scrollTriggerRef.current.kill();
-      }
+    // Calculate initial scroll width
+    const scrollWidth = getScrollWidth();
 
-      const scrollWidth = getScrollWidth();
-
-      // Set initial position (start from the right)
-      gsap.set(galleryInner, { x: -scrollWidth });
-
-      // Create the horizontal scroll animation
-      const tween = gsap.to(galleryInner, {
+    // Horizontal scroll animation
+    // We scroll from x: -scrollWidth (content off to the right) to x: 0 (content at normal position)
+    // This creates a right-to-left reveal as you scroll down
+    scrollTweenRef.current = gsap.fromTo(
+      galleryInner,
+      { x: -scrollWidth },
+      {
         x: 0,
         ease: "none",
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          // Dynamic end based on content width
-          end: () => `+=${scrollWidth}`,
+          end: () => `+=${getScrollWidth()}`,
           pin: true,
           scrub: 1.5,
           anticipatePin: 1,
@@ -89,25 +83,20 @@ export function Team() {
               setCurrentSection("team");
             }
 
-            // Calculate active index based on scroll progress
-            // Progress goes from 0 to 1 as we scroll
-            // But since we're reversed (right to left), we invert it
-            const progress = 1 - self.progress;
+            // Progress: 0 = start (content on right), 1 = end (content scrolled to normal)
+            const progress = self.progress;
 
-            // Calculate which team member is active
-            // Account for intro and outro sections
-            const introWidth = 560; // Approximate width of intro section
-            const outroWidth = 510; // Approximate width of outro section
-            const memberCardWidth = 860; // Approximate width of each member card (340 + 400 + gaps + padding)
+            // For right-to-left scroll, we invert the progress for index calculation
+            const invertedProgress = 1 - progress;
 
-            const totalContentWidth =
-              introWidth + team.length * memberCardWidth + outroWidth;
-            const scrollableWidth = getScrollWidth();
+            // Estimate widths for index calculation
+            const introWidth = 560;
+            const memberCardWidth = 860;
+            const totalScrollWidth = getScrollWidth();
 
-            // Calculate position in content
-            const currentPosition = progress * scrollableWidth;
+            // Calculate position based on inverted progress
+            const currentPosition = invertedProgress * totalScrollWidth;
 
-            // Determine which member we're viewing
             if (currentPosition < introWidth) {
               setActiveIndex(0);
             } else {
@@ -120,30 +109,23 @@ export function Team() {
               );
             }
           },
-          onEnterBack: () => {
-            setCurrentSection("team");
-          },
-          onRefresh: (self) => {
-            // Recalculate on refresh
-            const newScrollWidth = getScrollWidth();
+          onEnter: () => setCurrentSection("team"),
+          onEnterBack: () => setCurrentSection("team"),
+          onRefreshInit: (self) => {
+            // Reset position before refresh calculations
             gsap.set(galleryInner, {
-              x: -newScrollWidth * (1 - self.progress),
+              x: -getScrollWidth() * (1 - self.progress),
             });
           },
         },
-      });
+      },
+    );
 
-      scrollTriggerRef.current = tween.scrollTrigger as ScrollTrigger;
-    };
-
-    // Initial setup
-    setupScrollTrigger();
-
-    // Handle resize
+    // Handle resize with debounce
+    let resizeTimeout: NodeJS.Timeout;
     const handleResize = () => {
-      // Debounce the refresh
-      clearTimeout((handleResize as any).timeout);
-      (handleResize as any).timeout = setTimeout(() => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
         ScrollTrigger.refresh();
       }, 100);
     };
@@ -152,9 +134,12 @@ export function Team() {
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      if (scrollTriggerRef.current) {
-        scrollTriggerRef.current.kill();
+      clearTimeout(resizeTimeout);
+
+      if (scrollTweenRef.current) {
+        scrollTweenRef.current.kill();
       }
+
       ScrollTrigger.getAll().forEach((trigger) => {
         if (trigger.vars.trigger === section) {
           trigger.kill();
@@ -233,14 +218,14 @@ export function Team() {
         {/* Horizontal Gallery */}
         <div
           ref={galleryRef}
-          className="absolute top-0 right-0 h-full w-full overflow-hidden"
+          className="absolute top-0 left-0 h-full w-full overflow-hidden"
         >
           <div
             ref={galleryInnerRef}
             className="h-full flex items-center"
             style={{
               willChange: "transform",
-              // Add some padding at the end so the last item isn't cut off
+              paddingLeft: "5vw",
               paddingRight: "5vw",
             }}
           >
