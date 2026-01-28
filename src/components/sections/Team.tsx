@@ -95,8 +95,13 @@ export function Team() {
             const totalScrollWidth = getScrollWidth();
 
             // Calculate position based on inverted progress
-            const currentPosition = invertedProgress * totalScrollWidth;
+            //:const currentPosition = invertedProgress * totalScrollWidth;
+// Remove the inversion since we flipped the content
+// const progress = self.progress;
 
+// Calculate position based on progress (no longer inverted)
+const currentPosition = progress * totalScrollWidth;
+            
             if (currentPosition < introWidth) {
               setActiveIndex(0);
             } else {
@@ -281,7 +286,7 @@ export function Team() {
                 key={member.id}
                 member={member}
                 index={index}
-                isActive={index === activeIndex}
+                isActive={team.length - 1 - index === activeIndex} 
                 totalMembers={team.length}
               />
             ))}
