@@ -227,7 +227,7 @@ const currentPosition = progress * totalScrollWidth;
         >
           <div
             ref={galleryInnerRef}
-            className="h-full flex items-center"
+            className="h-full flex flex-row-reverse items-center"
             style={{
               willChange: "transform",
               paddingLeft: "5vw",
