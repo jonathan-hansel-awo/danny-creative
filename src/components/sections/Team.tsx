@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useStore } from "@/stores/useStore";
 import { team } from "@/data/team";
@@ -11,12 +11,22 @@ export function Team() {
   const headerRef = useRef<HTMLDivElement>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
   const galleryInnerRef = useRef<HTMLDivElement>(null);
+  const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const hasInitializedRef = useRef(false);
 
   const [activeIndex, setActiveIndex] = useState(0);
 
   const loadingPhase = useStore((s) => s.loadingPhase);
   const setCurrentSection = useStore((s) => s.setCurrentSection);
+
+  // Calculate the scroll width dynamically
+  const getScrollWidth = useCallback(() => {
+    if (!galleryInnerRef.current) return 0;
+    const contentWidth = galleryInnerRef.current.scrollWidth;
+    const viewportWidth = window.innerWidth;
+    // Return the amount we need to scroll (content that extends beyond viewport)
+    return Math.max(0, contentWidth - viewportWidth);
+  }, []);
 
   useEffect(() => {
     if (loadingPhase !== "complete") return;
@@ -31,15 +41,10 @@ export function Team() {
 
     hasInitializedRef.current = true;
 
-    // Calculate scroll distance
-    const getScrollWidth = () => {
-      return galleryInner.scrollWidth - window.innerWidth + 100;
-    };
-
     // Header animation
     gsap.fromTo(
       header,
-      { opacity: 0, y: 50 },
+      { opacity: 0, y: 40 },
       {
         opacity: 1,
         y: 0,
@@ -54,60 +59,109 @@ export function Team() {
       },
     );
 
-    // Horizontal scroll - RIGHT TO LEFT (reversed)
-    // Gallery starts positioned to the right and moves left as you scroll
-    const scrollWidth = getScrollWidth();
+    // Setup horizontal scroll
+    const setupScrollTrigger = () => {
+      // Kill existing ScrollTrigger if it exists
+      if (scrollTriggerRef.current) {
+        scrollTriggerRef.current.kill();
+      }
 
-    // Set initial position to the right
-    gsap.set(galleryInner, { x: -scrollWidth });
+      const scrollWidth = getScrollWidth();
 
-    const scrollTween = gsap.to(galleryInner, {
-      x: 0, // Move to 0 (left to right appearance)
-      ease: "none",
-      scrollTrigger: {
-        trigger: section,
-        start: "top top",
-        end: () => `+=${scrollWidth}`,
-        pin: true,
-        scrub: 1.8,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          if (self.isActive) {
+      // Set initial position (start from the right)
+      gsap.set(galleryInner, { x: -scrollWidth });
+
+      // Create the horizontal scroll animation
+      const tween = gsap.to(galleryInner, {
+        x: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          // Dynamic end based on content width
+          end: () => `+=${scrollWidth}`,
+          pin: true,
+          scrub: 1.5,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            if (self.isActive) {
+              setCurrentSection("team");
+            }
+
+            // Calculate active index based on scroll progress
+            // Progress goes from 0 to 1 as we scroll
+            // But since we're reversed (right to left), we invert it
+            const progress = 1 - self.progress;
+
+            // Calculate which team member is active
+            // Account for intro and outro sections
+            const introWidth = 560; // Approximate width of intro section
+            const outroWidth = 510; // Approximate width of outro section
+            const memberCardWidth = 860; // Approximate width of each member card (340 + 400 + gaps + padding)
+
+            const totalContentWidth =
+              introWidth + team.length * memberCardWidth + outroWidth;
+            const scrollableWidth = getScrollWidth();
+
+            // Calculate position in content
+            const currentPosition = progress * scrollableWidth;
+
+            // Determine which member we're viewing
+            if (currentPosition < introWidth) {
+              setActiveIndex(0);
+            } else {
+              const positionInMembers = currentPosition - introWidth;
+              const memberIndex = Math.floor(
+                positionInMembers / memberCardWidth,
+              );
+              setActiveIndex(
+                Math.min(Math.max(0, memberIndex), team.length - 1),
+              );
+            }
+          },
+          onEnterBack: () => {
             setCurrentSection("team");
-          }
-
-          // Calculate active index (reversed)
-          const progress = 1 - self.progress; // Reverse progress
-          const memberWidth = 1 / team.length;
-          const currentIndex = Math.min(
-            Math.floor(progress / memberWidth),
-            team.length - 1,
-          );
-
-          setActiveIndex(currentIndex);
+          },
+          onRefresh: (self) => {
+            // Recalculate on refresh
+            const newScrollWidth = getScrollWidth();
+            gsap.set(galleryInner, {
+              x: -newScrollWidth * (1 - self.progress),
+            });
+          },
         },
-        onEnterBack: () => {
-          setCurrentSection("team");
-        },
-      },
-    });
+      });
 
-    const handleResize = () => {
-      ScrollTrigger.refresh();
+      scrollTriggerRef.current = tween.scrollTrigger as ScrollTrigger;
     };
+
+    // Initial setup
+    setupScrollTrigger();
+
+    // Handle resize
+    const handleResize = () => {
+      // Debounce the refresh
+      clearTimeout((handleResize as any).timeout);
+      (handleResize as any).timeout = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 100);
+    };
+
     window.addEventListener("resize", handleResize);
 
     return () => {
-      scrollTween.kill();
+      window.removeEventListener("resize", handleResize);
+      if (scrollTriggerRef.current) {
+        scrollTriggerRef.current.kill();
+      }
       ScrollTrigger.getAll().forEach((trigger) => {
         if (trigger.vars.trigger === section) {
           trigger.kill();
         }
       });
-      window.removeEventListener("resize", handleResize);
     };
-  }, [loadingPhase, setCurrentSection]);
+  }, [loadingPhase, setCurrentSection, getScrollWidth]);
 
   return (
     <section
@@ -117,10 +171,10 @@ export function Team() {
       style={{ backgroundColor: "var(--color-cream-dark)" }}
     >
       <div className="relative h-screen overflow-hidden">
-        {/* Section Header - Fixed position */}
+        {/* Section Header */}
         <div
           ref={headerRef}
-          className="absolute top-12 md:top-16 right-6 md:right-12 z-10 text-right"
+          className="absolute top-12 right-12 z-10 text-right"
           style={{ opacity: 0 }}
         >
           <p
@@ -130,7 +184,7 @@ export function Team() {
             The People
           </p>
           <h2
-            className="text-2xl md:text-3xl"
+            className="text-3xl"
             style={{
               color: "#0F0F0F",
               fontFamily: "Tenor Sans, Georgia, serif",
@@ -159,10 +213,8 @@ export function Team() {
 
         {/* Counter */}
         <div
-          className="absolute bottom-8 right-6 md:right-12 z-10 flex items-baseline gap-1"
-          style={{
-            fontFamily: "Inter, sans-serif",
-          }}
+          className="absolute bottom-8 right-12 z-10 flex items-baseline gap-1"
+          style={{ fontFamily: "Inter, sans-serif" }}
         >
           <span
             className="text-3xl font-light tabular-nums"
@@ -178,7 +230,7 @@ export function Team() {
           </span>
         </div>
 
-        {/* Horizontal Gallery - Starts from right */}
+        {/* Horizontal Gallery */}
         <div
           ref={galleryRef}
           className="absolute top-0 right-0 h-full w-full overflow-hidden"
@@ -187,13 +239,17 @@ export function Team() {
             ref={galleryInnerRef}
             className="h-full flex items-center"
             style={{
-              paddingRight: "8vw",
               willChange: "transform",
+              // Add some padding at the end so the last item isn't cut off
+              paddingRight: "5vw",
             }}
           >
             {/* Intro Card */}
-            <div className="flex-shrink-0 w-[50vw] h-full flex items-center justify-center">
-              <div className="max-w-md text-center px-6">
+            <div
+              className="flex-shrink-0 h-full flex items-center justify-center"
+              style={{ padding: "0 80px" }}
+            >
+              <div style={{ width: "400px" }} className="text-center">
                 <div
                   className="w-20 h-20 rounded-full mx-auto mb-8 flex items-center justify-center"
                   style={{
@@ -219,7 +275,7 @@ export function Team() {
                   </svg>
                 </div>
                 <h3
-                  className="text-3xl md:text-4xl mb-4"
+                  className="text-4xl mb-4"
                   style={{
                     color: "#0F0F0F",
                     fontFamily: "Tenor Sans, Georgia, serif",
@@ -228,7 +284,7 @@ export function Team() {
                   The creative minds behind the magic
                 </h3>
                 <p className="text-base" style={{ color: "#6A6A6A" }}>
-                  A small team with big ideas. We&apos;re passionate, dedicated, and
+                  A small team with big ideas. Passionate, dedicated, and
                   obsessed with creating brands that matter.
                 </p>
               </div>
@@ -246,8 +302,11 @@ export function Team() {
             ))}
 
             {/* End CTA */}
-            <div className="flex-shrink-0 w-[40vw] h-full flex items-center justify-center">
-              <div className="text-center px-6">
+            <div
+              className="flex-shrink-0 h-full flex items-center justify-center"
+              style={{ padding: "0 80px" }}
+            >
+              <div style={{ width: "350px" }} className="text-center">
                 <p
                   className="text-sm tracking-[0.2em] uppercase mb-6"
                   style={{ color: "#8A8A8A" }}
@@ -283,7 +342,6 @@ export function Team() {
 
         {/* Decorative Elements */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Floating shapes */}
           <div
             className="absolute w-64 h-64 rounded-full opacity-20"
             style={{
@@ -291,7 +349,7 @@ export function Team() {
                 "radial-gradient(circle, rgba(212,148,15,0.3) 0%, transparent 70%)",
               top: "10%",
               left: "5%",
-              animation: "float 8s ease-in-out infinite",
+              animation: "teamFloat 8s ease-in-out infinite",
             }}
           />
           <div
@@ -301,15 +359,14 @@ export function Team() {
                 "radial-gradient(circle, rgba(212,148,15,0.2) 0%, transparent 70%)",
               bottom: "15%",
               right: "10%",
-              animation: "float 10s ease-in-out infinite reverse",
+              animation: "teamFloat 10s ease-in-out infinite reverse",
             }}
           />
         </div>
       </div>
 
-      {/* Add keyframes for floating animation */}
       <style jsx>{`
-        @keyframes float {
+        @keyframes teamFloat {
           0%,
           100% {
             transform: translateY(0) scale(1);
