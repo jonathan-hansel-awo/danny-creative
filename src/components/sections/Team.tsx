@@ -96,7 +96,12 @@ export function Team() {
 
             // Calculate position based on inverted progress
             const currentPosition = invertedProgress * totalScrollWidth;
+// Remove the inversion since we flipped the content
+// const progress = self.progress;
 
+// Calculate position based on progress (no longer inverted)
+            //const currentPosition = progress * totalScrollWidth;
+            
             if (currentPosition < introWidth) {
               setActiveIndex(0);
             } else {
