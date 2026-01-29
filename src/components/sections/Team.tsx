@@ -229,6 +229,54 @@ export function Team() {
               paddingRight: "5vw",
             }}
           >
+
+            {/* End CTA */}
+            <div
+              className="flex-shrink-0 h-full flex items-center justify-center"
+              style={{ padding: "0 80px" }}
+            >
+              <div style={{ width: "350px" }} className="text-center">
+                <p
+                  className="text-sm tracking-[0.2em] uppercase mb-6"
+                  style={{ color: "#8A8A8A" }}
+                >
+                  Want to join the team?
+                </p>
+                <button
+                  className="group flex items-center gap-3 mx-auto text-xl font-medium transition-all duration-500"
+                  style={{ color: "#D4940F" }}
+                  data-spark-hover
+                >
+                  <svg
+                    className="w-6 h-6 transition-transform duration-500 group-hover:-translate-x-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M7 16l-4-4m0 0l4-4m-4 4h18"
+                    />
+                  </svg>
+                  <span className="group-hover:underline underline-offset-4">
+                    Vacancies Opening Soon
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            {/* Team Member Cards */}
+            {team.map((member, index) => (
+              <TeamMemberCard
+                key={member.id}
+                member={member}
+                index={index}
+                isActive={index === activeIndex}
+                totalMembers={team.length}
+              />
+            ))}
             {/* Intro Card */}
             <div
               className="flex-shrink-0 h-full flex items-center justify-center"
@@ -274,55 +322,8 @@ export function Team() {
                 </p>
               </div>
             </div>
-
-            {/* Team Member Cards */}
-            {team.map((member, index) => (
-              <TeamMemberCard
-                key={member.id}
-                member={member}
-                index={index}
-                isActive={index === activeIndex}
-                totalMembers={team.length}
-              />
-            ))}
-
-            {/* End CTA */}
-            <div
-              className="flex-shrink-0 h-full flex items-center justify-center"
-              style={{ padding: "0 80px" }}
-            >
-              <div style={{ width: "350px" }} className="text-center">
-                <p
-                  className="text-sm tracking-[0.2em] uppercase mb-6"
-                  style={{ color: "#8A8A8A" }}
-                >
-                  Want to join the team?
-                </p>
-                <button
-                  className="group flex items-center gap-3 mx-auto text-xl font-medium transition-all duration-500"
-                  style={{ color: "#D4940F" }}
-                  data-spark-hover
-                >
-                  <svg
-                    className="w-6 h-6 transition-transform duration-500 group-hover:-translate-x-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M7 16l-4-4m0 0l4-4m-4 4h18"
-                    />
-                  </svg>
-                  <span className="group-hover:underline underline-offset-4">
-                    View Careers
-                  </span>
-                </button>
-              </div>
-            </div>
           </div>
+          
         </div>
 
         {/* Decorative Elements */}
